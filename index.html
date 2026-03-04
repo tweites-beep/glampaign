@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Glampaign — Campaign Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;1,400;1,500&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#09080c;
+  --deep:#100e16;
+  --surface:#16131f;
+  --card:#1c1927;
+  --card2:#221f30;
+  --border:rgba(255,255,255,.07);
+  --border2:rgba(255,255,255,.13);
+  --rose:#e8b4b8;
+  --rose2:#f5d5d8;
+  --gold:#c9a84c;
+  --gold2:#e8c97a;
+  --sage:#8fb5a0;
+  --violet:#b39ddb;
+  --ivory:#f7f0e8;
+  --muted:#7a7490;
+  --text:#c5bdd8;
+}
+
+body{
+  background:var(--ink);
+  color:var(--text);
+  font-family:'Outfit',sans-serif;
+  font-weight:300;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ── BACKGROUND ── */
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bg-mesh{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 20%,rgba(232,180,184,.06) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%,rgba(201,168,76,.05) 0%,transparent 55%),
+    radial-gradient(ellipse 40% 60% at 60% 30%,rgba(179,157,219,.04) 0%,transparent 50%);
+}
+.bg-lines{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px);
+  background-size:100% 64px;
+}
+
+/* ── TOPNAV ── */
+.topnav{
+  position:sticky;top:0;z-index:300;
+  height:58px;
+  background:rgba(9,8,12,.82);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;
+  padding:0 32px;gap:0;
+}
+.nav-brand{
+  display:flex;align-items:center;gap:11px;
+  text-decoration:none;
+}
+.nav-brand-gem{
+  width:28px;height:28px;
+  background:linear-gradient(135deg,var(--rose),var(--gold));
+  clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);
+  flex-shrink:0;
+}
+.nav-brand-name{
+  font-family:'Bodoni Moda',serif;
+  font-size:1.05rem;letter-spacing:.08em;
+  color:var(--ivory);
+}
+.nav-brand-name span{color:var(--rose);font-style:italic}
+.nav-brand-sub{
+  font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--muted);margin-left:14px;padding-left:14px;
+  border-left:1px solid var(--border2);
+}
+.nav-actions{margin-left:auto;display:flex;align-items:center;gap:10px}
+.nav-btn{
+  background:none;border:1px solid var(--border2);
+  color:var(--muted);border-radius:3px;
+  padding:6px 14px;font-family:'Outfit',sans-serif;
+  font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;
+  cursor:pointer;transition:all .2s;
+}
+.nav-btn:hover{color:var(--rose);border-color:rgba(232,180,184,.3)}
+.nav-btn.primary{
+  background:linear-gradient(135deg,rgba(232,180,184,.15),rgba(201,168,76,.1));
+  border-color:rgba(232,180,184,.3);color:var(--rose2);
+}
+.nav-btn.primary:hover{background:linear-gradient(135deg,rgba(232,180,184,.25),rgba(201,168,76,.15))}
+
+/* ── LAYOUT ── */
+.app{display:flex;height:calc(100vh - 58px);position:relative;z-index:1}
+
+/* ── LEFT SIDEBAR ── */
+.sidebar{
+  width:280px;flex-shrink:0;
+  background:var(--deep);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+.sidebar-section{
+  padding:20px 20px 0;
+}
+.sidebar-label{
+  font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;
+}
+.sidebar-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* Campaign list */
+.campaign-list{
+  flex:1;overflow-y:auto;padding:0 12px 12px;
+}
+.campaign-list::-webkit-scrollbar{width:4px}
+.campaign-list::-webkit-scrollbar-track{background:transparent}
+.campaign-list::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+.campaign-item{
+  padding:12px 14px;border-radius:5px;
+  cursor:pointer;transition:all .18s;
+  margin-bottom:4px;border:1px solid transparent;
+  position:relative;
+}
+.campaign-item:hover{background:var(--surface);border-color:var(--border)}
+.campaign-item.active{background:var(--card);border-color:rgba(232,180,184,.2)}
+.ci-name{font-size:.82rem;color:var(--ivory);letter-spacing:.02em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ci-meta{font-size:.62rem;color:var(--muted);margin-top:3px;letter-spacing:.04em}
+.ci-scenes{
+  position:absolute;top:10px;right:10px;
+  font-size:.58rem;letter-spacing:.08em;
+  color:var(--rose);background:rgba(232,180,184,.1);
+  border-radius:10px;padding:2px 7px;
+}
+.campaign-item.active .ci-scenes{background:rgba(232,180,184,.18)}
+
+.new-campaign-btn{
+  margin:0 12px 16px;
+  background:linear-gradient(135deg,rgba(232,180,184,.1),rgba(201,168,76,.06));
+  border:1px dashed rgba(232,180,184,.25);
+  border-radius:5px;padding:12px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  cursor:pointer;transition:all .2s;
+  font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--rose);font-family:'Outfit',sans-serif;
+}
+.new-campaign-btn:hover{background:linear-gradient(135deg,rgba(232,180,184,.16),rgba(201,168,76,.1));border-style:solid}
+.new-campaign-btn svg{width:14px;height:14px;fill:var(--rose)}
+
+/* ── MAIN CANVAS ── */
+.canvas{
+  flex:1;display:flex;flex-direction:column;
+  overflow:hidden;background:var(--surface);
+}
+
+/* Canvas topbar */
+.canvas-bar{
+  height:52px;flex-shrink:0;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;
+  padding:0 24px;gap:14px;
+  background:var(--deep);
+}
+.canvas-title-wrap{flex:1}
+.canvas-campaign-name{
+  font-family:'Bodoni Moda',serif;
+  font-size:1rem;color:var(--ivory);letter-spacing:.04em;
+  background:none;border:none;outline:none;
+  width:100%;cursor:text;
+}
+.canvas-campaign-name::placeholder{color:var(--muted)}
+.canvas-meta{font-size:.6rem;color:var(--muted);margin-top:1px;letter-spacing:.06em}
+.canvas-bar-actions{display:flex;gap:8px;align-items:center}
+.cb-btn{
+  background:none;border:1px solid var(--border);
+  color:var(--muted);border-radius:3px;padding:5px 12px;
+  font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;
+  cursor:pointer;transition:all .2s;font-family:'Outfit',sans-serif;
+  display:flex;align-items:center;gap:6px;
+}
+.cb-btn svg{width:11px;height:11px;fill:currentColor}
+.cb-btn:hover{color:var(--text);border-color:var(--border2)}
+.cb-btn.rose{border-color:rgba(232,180,184,.25);color:var(--rose)}
+.cb-btn.rose:hover{background:rgba(232,180,184,.08)}
+
+/* ── STORYBOARD CANVAS ── */
+.storyboard{
+  flex:1;overflow-y:auto;
+  padding:28px 24px;
+}
+.storyboard::-webkit-scrollbar{width:5px}
+.storyboard::-webkit-scrollbar-track{background:transparent}
+.storyboard::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* Empty state */
+.empty-state{
+  height:100%;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:40px;
+}
+.empty-gem{
+  width:64px;height:64px;
+  background:linear-gradient(135deg,rgba(232,180,184,.15),rgba(201,168,76,.08));
+  clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);
+  margin:0 auto 20px;
+  display:flex;align-items:center;justify-content:center;
+}
+.empty-state h2{
+  font-family:'Bodoni Moda',serif;
+  font-size:1.6rem;font-weight:400;
+  color:var(--ivory);margin-bottom:10px;letter-spacing:.04em;
+}
+.empty-state h2 em{font-style:italic;color:var(--rose)}
+.empty-state p{font-size:.82rem;color:var(--muted);line-height:1.8;max-width:400px;margin-bottom:28px}
+
+/* Scene cards row */
+.scenes-row{
+  display:flex;gap:16px;
+  flex-wrap:wrap;
+  align-content:flex-start;
+}
+
+/* Scene card */
+.scene-card{
+  width:220px;flex-shrink:0;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:7px;overflow:hidden;
+  transition:all .2s;
+  position:relative;
+  animation:popIn .3s ease both;
+  cursor:pointer;
+}
+.scene-card:hover{border-color:rgba(232,180,184,.25);transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,.3)}
+.scene-card.active-scene{border-color:rgba(232,180,184,.5);box-shadow:0 0 0 2px rgba(232,180,184,.15)}
+
+/* Scene thumbnail */
+.scene-thumb{
+  height:130px;
+  background:linear-gradient(135deg,var(--card2),var(--deep));
+  position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+.scene-thumb-bg{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:2.2rem;opacity:.3;
+}
+.scene-num{
+  position:absolute;top:8px;left:10px;
+  font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--rose);background:rgba(9,8,12,.7);
+  padding:2px 7px;border-radius:2px;
+}
+.scene-type-badge{
+  position:absolute;bottom:8px;right:8px;
+  font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;
+  padding:3px 8px;border-radius:2px;
+}
+.scene-card-body{padding:12px 14px 14px}
+.scene-title{
+  font-size:.82rem;color:var(--ivory);
+  letter-spacing:.02em;line-height:1.3;
+  margin-bottom:5px;
+}
+.scene-duration{font-size:.62rem;color:var(--muted);letter-spacing:.06em}
+.scene-preview{
+  font-size:.7rem;color:var(--muted);
+  line-height:1.5;margin-top:6px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.scene-actions{
+  display:flex;gap:6px;margin-top:10px;
+  padding-top:10px;border-top:1px solid var(--border);
+}
+.scene-act-btn{
+  flex:1;background:none;border:1px solid var(--border);
+  color:var(--muted);border-radius:2px;padding:5px;
+  font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;
+  cursor:pointer;transition:all .18s;font-family:'Outfit',sans-serif;
+  display:flex;align-items:center;justify-content:center;gap:4px;
+}
+.scene-act-btn svg{width:10px;height:10px;fill:currentColor}
+.scene-act-btn:hover{color:var(--rose);border-color:rgba(232,180,184,.3)}
+.scene-act-btn.danger:hover{color:#ff6b6b;border-color:rgba(255,107,107,.3)}
+
+/* Add scene card */
+.add-scene-card{
+  width:220px;flex-shrink:0;
+  height:240px;
+  border:2px dashed rgba(232,180,184,.15);
+  border-radius:7px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:10px;
+  cursor:pointer;transition:all .2s;
+  color:var(--muted);
+}
+.add-scene-card:hover{border-color:rgba(232,180,184,.35);color:var(--rose);background:rgba(232,180,184,.03)}
+.add-scene-card svg{width:20px;height:20px;fill:currentColor;opacity:.6}
+.add-scene-card span{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase}
+
+/* Campaign summary bar */
+.campaign-summary{
+  border-top:1px solid var(--border);
+  padding:12px 24px;
+  background:var(--deep);
+  display:flex;gap:24px;align-items:center;
+  flex-shrink:0;
+}
+.cs-stat{display:flex;align-items:center;gap:8px}
+.cs-stat-num{
+  font-family:'Bodoni Moda',serif;
+  font-size:1.1rem;color:var(--gold2);
+}
+.cs-stat-label{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.cs-divider{width:1px;height:24px;background:var(--border)}
+
+/* ── RIGHT PANEL ── */
+.right-panel{
+  width:340px;flex-shrink:0;
+  background:var(--deep);
+  border-left:1px solid var(--border);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+.rp-tabs{
+  display:flex;border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.rp-tab{
+  flex:1;padding:13px 8px;text-align:center;
+  font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);cursor:pointer;transition:all .2s;
+  border-bottom:2px solid transparent;
+}
+.rp-tab.active{color:var(--rose);border-bottom-color:var(--rose)}
+.rp-tab:hover:not(.active){color:var(--text)}
+
+.rp-content{flex:1;overflow-y:auto;padding:20px}
+.rp-content::-webkit-scrollbar{width:4px}
+.rp-content::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* Scene editor */
+.field-group{margin-bottom:18px}
+.field-label{
+  font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:7px;display:block;
+}
+.field-input,.field-textarea,.field-select{
+  width:100%;background:var(--surface);
+  border:1px solid var(--border);border-radius:4px;
+  padding:10px 12px;
+  font-family:'Outfit',sans-serif;font-size:.82rem;
+  color:var(--ivory);outline:none;
+  transition:border-color .2s;
+  letter-spacing:.02em;
+}
+.field-textarea{resize:vertical;min-height:80px;line-height:1.6}
+.field-input:focus,.field-textarea:focus,.field-select:focus{border-color:rgba(232,180,184,.4)}
+.field-input::placeholder,.field-textarea::placeholder{color:var(--muted)}
+.field-select{cursor:pointer}
+.field-select option{background:var(--card)}
+
+/* Scene type pills */
+.type-pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+.type-pill{
+  padding:5px 12px;border-radius:20px;
+  border:1px solid var(--border);
+  font-size:.62rem;letter-spacing:.1em;
+  cursor:pointer;transition:all .18s;color:var(--muted);
+}
+.type-pill:hover{border-color:var(--border2);color:var(--text)}
+.type-pill.selected{border-color:rgba(232,180,184,.4);color:var(--rose);background:rgba(232,180,184,.08)}
+
+/* AI Generate button */
+.ai-gen-btn{
+  width:100%;
+  background:linear-gradient(135deg,rgba(232,180,184,.12),rgba(201,168,76,.08));
+  border:1px solid rgba(232,180,184,.25);
+  border-radius:4px;padding:12px;
+  font-family:'Outfit',sans-serif;font-size:.72rem;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--rose2);cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  margin-bottom:14px;
+}
+.ai-gen-btn:hover{background:linear-gradient(135deg,rgba(232,180,184,.2),rgba(201,168,76,.12));transform:translateY(-1px)}
+.ai-gen-btn svg{width:14px;height:14px;fill:var(--rose)}
+.ai-gen-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+/* Generated content box */
+.gen-box{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:4px;padding:14px;margin-bottom:14px;
+  font-size:.78rem;color:var(--text);line-height:1.7;
+  border-left:2px solid var(--rose);
+  white-space:pre-wrap;display:none;
+}
+.gen-box.show{display:block}
+
+/* Caption panel */
+.caption-section{margin-bottom:20px}
+.caption-section h4{
+  font-family:'Bodoni Moda',serif;
+  font-size:.95rem;color:var(--ivory);font-weight:400;
+  margin-bottom:10px;letter-spacing:.04em;
+}
+.caption-box{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:4px;padding:14px;
+  font-size:.78rem;color:var(--text);line-height:1.8;
+  white-space:pre-wrap;min-height:60px;
+}
+.hashtag-cloud{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.hashtag{
+  font-size:.65rem;letter-spacing:.04em;
+  color:var(--violet);background:rgba(179,157,219,.08);
+  border:1px solid rgba(179,157,219,.18);
+  border-radius:3px;padding:3px 8px;cursor:pointer;
+  transition:all .18s;
+}
+.hashtag:hover{background:rgba(179,157,219,.15)}
+
+/* Export panel */
+.export-option{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:5px;padding:16px;margin-bottom:10px;
+  cursor:pointer;transition:all .2s;
+  display:flex;align-items:flex-start;gap:12px;
+}
+.export-option:hover{border-color:rgba(232,180,184,.25);background:var(--card2)}
+.export-icon{
+  width:36px;height:36px;border-radius:4px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;flex-shrink:0;
+}
+.export-info h4{font-size:.82rem;color:var(--ivory);margin-bottom:3px;letter-spacing:.02em}
+.export-info p{font-size:.68rem;color:var(--muted);line-height:1.5}
+
+/* Loading spinner */
+.spin{animation:spin 1s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── MODALS ── */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(5,4,8,.88);
+  backdrop-filter:blur(12px);z-index:500;
+  display:flex;align-items:center;justify-content:center;padding:24px;
+  opacity:0;pointer-events:none;transition:opacity .25s;
+}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{
+  background:var(--card);border:1px solid rgba(232,180,184,.2);
+  border-radius:8px;width:100%;max-width:520px;
+  padding:32px;
+  transform:translateY(16px);transition:transform .3s cubic-bezier(.4,0,.2,1);
+  position:relative;
+}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal-close{
+  position:absolute;top:14px;right:16px;
+  background:none;border:none;color:var(--muted);
+  font-size:1.3rem;cursor:pointer;transition:color .2s;
+}
+.modal-close:hover{color:var(--ivory)}
+.modal h2{
+  font-family:'Bodoni Moda',serif;
+  font-size:1.4rem;font-weight:400;color:var(--ivory);
+  margin-bottom:6px;letter-spacing:.04em;
+}
+.modal h2 em{font-style:italic;color:var(--rose)}
+.modal p{font-size:.8rem;color:var(--muted);margin-bottom:22px;line-height:1.7}
+.modal-actions{display:flex;gap:10px;margin-top:20px;justify-content:flex-end}
+.btn-modal-primary{
+  background:linear-gradient(135deg,var(--rose),var(--gold));
+  color:#000;border:none;border-radius:3px;
+  padding:10px 22px;font-family:'Outfit',sans-serif;
+  font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
+  cursor:pointer;font-weight:500;transition:all .2s;
+}
+.btn-modal-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(232,180,184,.3)}
+.btn-modal-ghost{
+  background:none;border:1px solid var(--border2);
+  color:var(--muted);border-radius:3px;
+  padding:10px 22px;font-family:'Outfit',sans-serif;
+  font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
+  cursor:pointer;transition:all .2s;
+}
+.btn-modal-ghost:hover{color:var(--text);border-color:var(--border2)}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ── MOBILE ── */
+@media(max-width:900px){
+  .sidebar{display:none}
+  .right-panel{display:none}
+  .canvas{width:100%}
+}
+@media(max-width:640px){
+  .topnav{padding:0 16px}
+  .canvas-bar{padding:0 16px}
+  .storyboard{padding:16px}
+  .scenes-row{flex-direction:column;align-items:center}
+  .scene-card,.add-scene-card{width:100%;max-width:340px}
+}
+</style>
+</head>
+<body>
+
+<div class="bg"><div class="bg-mesh"></div><div class="bg-lines"></div></div>
+
+<!-- TOPNAV -->
+<nav class="topnav">
+  <div class="nav-brand">
+    <div class="nav-brand-gem"></div>
+    <div class="nav-brand-name">Glam<span>paign</span></div>
+    <div class="nav-brand-sub">by Velocity Agentic</div>
+  </div>
+  <div class="nav-actions">
+    <button class="nav-btn" onclick="openExportModal()">
+      Export
+    </button>
+    <button class="nav-btn primary" onclick="openNewCampaignModal()">
+      + New Campaign
+    </button>
+  </div>
+</nav>
+
+<!-- APP -->
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section" style="padding-bottom:12px">
+      <div class="sidebar-label">Campaigns</div>
+    </div>
+    <div class="campaign-list" id="campaignList"></div>
+    <button class="new-campaign-btn" onclick="openNewCampaignModal()">
+      <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+      New Campaign
+    </button>
+  </aside>
+
+  <!-- CANVAS -->
+  <main class="canvas">
+    <div class="canvas-bar">
+      <div class="canvas-title-wrap">
+        <input class="canvas-campaign-name" id="campaignNameInput" 
+          placeholder="Untitled Campaign" 
+          onchange="renameCampaign(this.value)"
+          oninput="renameCampaign(this.value)"/>
+        <div class="canvas-meta" id="canvasMeta">No campaign selected</div>
+      </div>
+      <div class="canvas-bar-actions">
+        <button class="cb-btn" onclick="generateFullCampaign()">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          AI Generate All
+        </button>
+        <button class="cb-btn rose" onclick="addScene()">
+          + Add Scene
+        </button>
+      </div>
+    </div>
+
+    <div class="storyboard" id="storyboard">
+      <div class="empty-state" id="emptyState">
+        <div class="empty-gem"></div>
+        <h2>Your <em>Campaign</em> Canvas</h2>
+        <p>Start a new campaign or select one from the sidebar. Each scene becomes a building block of your viral Instagram strategy — storyboarded, scripted, and prompt-ready.</p>
+        <button class="btn-modal-primary" onclick="openNewCampaignModal()">Create Your First Campaign</button>
+      </div>
+      <div class="scenes-row" id="scenesRow" style="display:none"></div>
+    </div>
+
+    <div class="campaign-summary" id="campaignSummary" style="display:none">
+      <div class="cs-stat">
+        <div class="cs-stat-num" id="totalScenes">0</div>
+        <div class="cs-stat-label">Scenes</div>
+      </div>
+      <div class="cs-divider"></div>
+      <div class="cs-stat">
+        <div class="cs-stat-num" id="totalDuration">0s</div>
+        <div class="cs-stat-label">Est. Duration</div>
+      </div>
+      <div class="cs-divider"></div>
+      <div class="cs-stat">
+        <div class="cs-stat-num" id="totalPrompts">0</div>
+        <div class="cs-stat-label">Prompts Ready</div>
+      </div>
+      <div class="cs-divider"></div>
+      <div class="cs-stat" style="margin-left:auto">
+        <button class="cb-btn rose" onclick="openExportModal()" style="font-size:.65rem">
+          <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+          Export Package
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- RIGHT PANEL -->
+  <aside class="right-panel" id="rightPanel">
+    <div class="rp-tabs">
+      <div class="rp-tab active" onclick="switchRPTab('scene',this)">Scene</div>
+      <div class="rp-tab" onclick="switchRPTab('caption',this)">Caption</div>
+      <div class="rp-tab" onclick="switchRPTab('export',this)">Export</div>
+    </div>
+    <div class="rp-content" id="rpContent">
+      <div style="text-align:center;padding:40px 0;color:var(--muted)">
+        <div style="font-size:1.5rem;margin-bottom:10px">✦</div>
+        <div style="font-size:.75rem;letter-spacing:.1em">Select a scene to edit</div>
+      </div>
+    </div>
+  </aside>
+
+</div>
+
+<!-- NEW CAMPAIGN MODAL -->
+<div class="modal-overlay" id="newCampaignModal" onclick="if(event.target===this)closeModal('newCampaignModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('newCampaignModal')">&times;</button>
+    <h2>New <em>Campaign</em></h2>
+    <p>Give your campaign a name and choose your content goal. Glampaign will scaffold the scenes and generate AI prompts for each one.</p>
+    <div class="field-group">
+      <label class="field-label">Campaign Name</label>
+      <input class="field-input" id="newCampaignName" placeholder="e.g. Sheila Johnson Launch Series"/>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Campaign Goal</label>
+      <select class="field-select" id="newCampaignGoal">
+        <option value="brand_awareness">Brand Awareness</option>
+        <option value="lead_generation">Lead Generation</option>
+        <option value="product_launch">Product / Service Launch</option>
+        <option value="thought_leadership">Thought Leadership</option>
+        <option value="community_growth">Community Growth</option>
+        <option value="sales_conversion">Sales & Conversion</option>
+        <option value="viral_growth">Viral Growth</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Industry / Niche</label>
+      <input class="field-input" id="newCampaignIndustry" placeholder="e.g. Luxury Brand Development"/>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Number of Scenes</label>
+      <select class="field-select" id="newCampaignScenes">
+        <option value="3">3 scenes (Short Series)</option>
+        <option value="5" selected>5 scenes (Standard Campaign)</option>
+        <option value="7">7 scenes (Full Campaign)</option>
+        <option value="10">10 scenes (Maxi Campaign)</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal-ghost" onclick="closeModal('newCampaignModal')">Cancel</button>
+      <button class="btn-modal-primary" onclick="createCampaign()">Build Campaign →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD SCENE MODAL -->
+<div class="modal-overlay" id="addSceneModal" onclick="if(event.target===this)closeModal('addSceneModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('addSceneModal')">&times;</button>
+    <h2>Add <em>Scene</em></h2>
+    <p>Define this scene's role in your campaign. Glampaign will generate the shot direction, avatar prompt, and caption for it.</p>
+    <div class="field-group">
+      <label class="field-label">Scene Title</label>
+      <input class="field-input" id="newSceneTitle" placeholder="e.g. The Hook — Pattern Interrupt"/>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Scene Type</label>
+      <div class="type-pills" id="sceneTypePills"></div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Scene Brief (optional)</label>
+      <textarea class="field-textarea" id="newSceneBrief" placeholder="What happens in this scene? What do you want to convey?"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal-ghost" onclick="closeModal('addSceneModal')">Cancel</button>
+      <button class="btn-modal-primary" onclick="confirmAddScene()">Add Scene →</button>
+    </div>
+  </div>
+</div>
+
+<!-- EXPORT MODAL -->
+<div class="modal-overlay" id="exportModal" onclick="if(event.target===this)closeModal('exportModal')">
+  <div class="modal" style="max-width:480px">
+    <button class="modal-close" onclick="closeModal('exportModal')">&times;</button>
+    <h2>Export <em>Package</em></h2>
+    <p>Your complete campaign package — ready to hand to a videographer, VA, or plug directly into any AI video tool.</p>
+    <div class="export-option" onclick="exportCampaignBrief()">
+      <div class="export-icon" style="background:rgba(232,180,184,.1)">📄</div>
+      <div class="export-info">
+        <h4>Full Campaign Brief</h4>
+        <p>All scenes, prompts, shot directions, music suggestions — complete director's package as a text file</p>
+      </div>
+    </div>
+    <div class="export-option" onclick="exportCaptions()">
+      <div class="export-icon" style="background:rgba(201,168,76,.1)">✍️</div>
+      <div class="export-info">
+        <h4>Captions & Hashtags</h4>
+        <p>All post captions and hashtag clusters ready to copy-paste into Instagram</p>
+      </div>
+    </div>
+    <div class="export-option" onclick="exportPrompts()">
+      <div class="export-icon" style="background:rgba(179,157,219,.1)">🤖</div>
+      <div class="export-info">
+        <h4>Avatar Prompts Only</h4>
+        <p>All Amara avatar prompts extracted and ready for your AI video generation tool</p>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal-ghost" onclick="closeModal('exportModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+var state = {
+  campaigns: JSON.parse(localStorage.getItem('glampaign_campaigns') || '[]'),
+  activeCampaignId: null,
+  activeSceneIdx: null,
+  activeRPTab: 'scene'
+};
+
+var SCENE_TYPES = [
+  {id:'hook', label:'🎣 Hook', color:'rgba(232,180,184,.15)', textColor:'#e8b4b8'},
+  {id:'story', label:'📖 Story', color:'rgba(201,168,76,.15)', textColor:'#c9a84c'},
+  {id:'value', label:'💎 Value Drop', color:'rgba(143,181,160,.15)', textColor:'#8fb5a0'},
+  {id:'social_proof', label:'⭐ Social Proof', color:'rgba(179,157,219,.15)', textColor:'#b39ddb'},
+  {id:'cta', label:'🔥 CTA', color:'rgba(255,107,107,.15)', textColor:'#ff6b6b'},
+  {id:'reveal', label:'✨ Reveal', color:'rgba(232,180,184,.15)', textColor:'#e8b4b8'},
+  {id:'tutorial', label:'🎓 Tutorial', color:'rgba(201,168,76,.12)', textColor:'#c9a84c'},
+  {id:'bts', label:'🎬 Behind Scenes', color:'rgba(107,122,141,.15)', textColor:'#9ba8b7'},
+];
+
+var selectedSceneType = 'hook';
+
+function saveState(){
+  localStorage.setItem('glampaign_campaigns', JSON.stringify(state.campaigns));
+}
+
+function getActiveCampaign(){
+  return state.campaigns.find(function(c){ return c.id === state.activeCampaignId; });
+}
+
+// ── CAMPAIGN LIST ──
+function renderCampaignList(){
+  var list = document.getElementById('campaignList');
+  if(!state.campaigns.length){
+    list.innerHTML = '<div style="padding:16px 14px;font-size:.72rem;color:var(--muted);letter-spacing:.06em;text-align:center">No campaigns yet</div>';
+    return;
+  }
+  list.innerHTML = state.campaigns.map(function(c){
+    var active = c.id === state.activeCampaignId ? 'active' : '';
+    return '<div class="campaign-item '+active+'" onclick="selectCampaign(\''+c.id+'\')">'+
+      '<div class="ci-name">'+c.name+'</div>'+
+      '<div class="ci-meta">'+c.goal.replace(/_/g,' ')+'</div>'+
+      '<div class="ci-scenes">'+c.scenes.length+' scenes</div>'+
+    '</div>';
+  }).join('');
+}
+
+// ── SELECT CAMPAIGN ──
+function selectCampaign(id){
+  state.activeCampaignId = id;
+  state.activeSceneIdx = null;
+  renderCampaignList();
+  renderCanvas();
+  renderRightPanel();
+}
+
+// ── RENDER CANVAS ──
+function renderCanvas(){
+  var campaign = getActiveCampaign();
+  var emptyState = document.getElementById('emptyState');
+  var scenesRow = document.getElementById('scenesRow');
+  var summary = document.getElementById('campaignSummary');
+  var nameInput = document.getElementById('campaignNameInput');
+  var meta = document.getElementById('canvasMeta');
+
+  if(!campaign){
+    emptyState.style.display = '';
+    scenesRow.style.display = 'none';
+    summary.style.display = 'none';
+    nameInput.value = '';
+    meta.textContent = 'No campaign selected';
+    return;
+  }
+
+  emptyState.style.display = 'none';
+  scenesRow.style.display = 'flex';
+  summary.style.display = 'flex';
+  nameInput.value = campaign.name;
+  meta.textContent = campaign.goal.replace(/_/g,' ').replace(/\b\w/g,function(l){return l.toUpperCase()}) + ' · ' + campaign.industry;
+
+  // Build scene cards
+  scenesRow.innerHTML = '';
+  campaign.scenes.forEach(function(scene, idx){
+    var typeData = SCENE_TYPES.find(function(t){ return t.id===scene.type; }) || SCENE_TYPES[0];
+    var active = idx === state.activeSceneIdx ? 'active-scene' : '';
+    var card = document.createElement('div');
+    card.className = 'scene-card '+active;
+    card.onclick = function(){ selectScene(idx); };
+    card.innerHTML =
+      '<div class="scene-thumb">'+
+        '<div class="scene-thumb-bg">'+typeData.label.split(' ')[0]+'</div>'+
+        '<div class="scene-num">Scene '+(idx+1)+'</div>'+
+        '<div class="scene-type-badge" style="background:'+typeData.color+';color:'+typeData.textColor+'">'+typeData.label.split(' ').slice(1).join(' ')+'</div>'+
+      '</div>'+
+      '<div class="scene-card-body">'+
+        '<div class="scene-title">'+scene.title+'</div>'+
+        '<div class="scene-duration">'+scene.duration+'s · '+typeData.label.split(' ').slice(1).join(' ')+'</div>'+
+        (scene.prompt ? '<div class="scene-preview">'+scene.prompt.slice(0,80)+'...</div>' : '<div class="scene-preview" style="color:var(--muted);font-style:italic">No prompt yet — click to generate</div>')+
+        '<div class="scene-actions">'+
+          '<button class="scene-act-btn" onclick="event.stopPropagation();generateScenePrompt('+idx+')">'+
+            '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>'+
+            'Generate'+
+          '</button>'+
+          '<button class="scene-act-btn" onclick="event.stopPropagation();moveScene('+idx+',-1)" '+(idx===0?'disabled':'')+'>↑</button>'+
+          '<button class="scene-act-btn" onclick="event.stopPropagation();moveScene('+idx+',1)" '+(idx===campaign.scenes.length-1?'disabled':'')+'>↓</button>'+
+          '<button class="scene-act-btn danger" onclick="event.stopPropagation();deleteScene('+idx+')">'+
+            '<svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>'+
+          '</button>'+
+        '</div>'+
+      '</div>';
+    scenesRow.appendChild(card);
+  });
+
+  // Add scene button
+  var addCard = document.createElement('div');
+  addCard.className = 'add-scene-card';
+  addCard.onclick = addScene;
+  addCard.innerHTML = '<svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg><span>Add Scene</span>';
+  scenesRow.appendChild(addCard);
+
+  // Summary
+  var totalDur = campaign.scenes.reduce(function(a,s){ return a+(parseInt(s.duration)||5); }, 0);
+  var totalPrompts = campaign.scenes.filter(function(s){ return s.prompt; }).length;
+  document.getElementById('totalScenes').textContent = campaign.scenes.length;
+  document.getElementById('totalDuration').textContent = totalDur+'s';
+  document.getElementById('totalPrompts').textContent = totalPrompts+'/'+campaign.scenes.length;
+}
+
+// ── SELECT SCENE ──
+function selectScene(idx){
+  state.activeSceneIdx = idx;
+  renderCanvas();
+  renderRightPanel();
+  switchRPTab('scene', document.querySelector('.rp-tab'));
+}
+
+// ── RIGHT PANEL ──
+function switchRPTab(tab, el){
+  state.activeRPTab = tab;
+  document.querySelectorAll('.rp-tab').forEach(function(t){ t.classList.remove('active'); });
+  if(el) el.classList.add('active');
+  else document.querySelectorAll('.rp-tab')[tab==='scene'?0:tab==='caption'?1:2].classList.add('active');
+  renderRightPanel();
+}
+
+function renderRightPanel(){
+  var content = document.getElementById('rpContent');
+  var campaign = getActiveCampaign();
+  if(!campaign || state.activeSceneIdx === null){
+    if(state.activeRPTab === 'export'){
+      renderExportPanel(content);
+    } else if(state.activeRPTab === 'caption' && campaign){
+      renderCaptionPanel(content, campaign);
+    } else {
+      content.innerHTML = '<div style="text-align:center;padding:40px 0;color:var(--muted)"><div style="font-size:1.5rem;margin-bottom:10px">✦</div><div style="font-size:.75rem;letter-spacing:.1em">Select a scene to edit</div></div>';
+    }
+    return;
+  }
+  var scene = campaign.scenes[state.activeSceneIdx];
+  if(state.activeRPTab === 'scene') renderSceneEditor(content, scene, state.activeSceneIdx);
+  else if(state.activeRPTab === 'caption') renderCaptionPanel(content, campaign);
+  else renderExportPanel(content);
+}
+
+function renderSceneEditor(content, scene, idx){
+  var typeData = SCENE_TYPES.find(function(t){ return t.id===scene.type; }) || SCENE_TYPES[0];
+  content.innerHTML =
+    '<div style="margin-bottom:16px">'+
+      '<div style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Scene '+(idx+1)+'</div>'+
+      '<div style="font-family:\'Bodoni Moda\',serif;font-size:1.1rem;color:var(--ivory)">'+scene.title+'</div>'+
+    '</div>'+
+    '<div class="field-group">'+
+      '<label class="field-label">Scene Title</label>'+
+      '<input class="field-input" value="'+scene.title+'" onchange="updateScene('+idx+',\'title\',this.value)"/>'+
+    '</div>'+
+    '<div class="field-group">'+
+      '<label class="field-label">Duration (seconds)</label>'+
+      '<input class="field-input" type="number" value="'+scene.duration+'" min="3" max="60" onchange="updateScene('+idx+',\'duration\',this.value)"/>'+
+    '</div>'+
+    '<div class="field-group">'+
+      '<label class="field-label">Scene Brief</label>'+
+      '<textarea class="field-textarea" onchange="updateScene('+idx+',\'brief\',this.value)">'+scene.brief+'</textarea>'+
+    '</div>'+
+    '<button class="ai-gen-btn" id="genBtn'+idx+'" onclick="generateScenePrompt('+idx+')">'+
+      '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>'+
+      'Generate Amara Prompt'+
+    '</button>'+
+    '<div class="gen-box '+(scene.prompt?'show':'')+'" id="genBox'+idx+'">'+scene.prompt+'</div>'+
+    (scene.prompt ? '<button class="btn-modal-ghost" style="width:100%;margin-top:8px;font-size:.62rem;padding:8px" onclick="copyScenePrompt('+idx+')">Copy Prompt</button>' : '');
+}
+
+function renderCaptionPanel(content, campaign){
+  if(!campaign.caption){
+    content.innerHTML =
+      '<div style="margin-bottom:16px">'+
+        '<div style="font-family:\'Bodoni Moda\',serif;font-size:1.1rem;color:var(--ivory);margin-bottom:6px">Captions & Hashtags</div>'+
+        '<div style="font-size:.75rem;color:var(--muted);line-height:1.6">Generate captions for each scene plus your full hashtag strategy.</div>'+
+      '</div>'+
+      '<button class="ai-gen-btn" onclick="generateCaptions()">'+
+        '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>'+
+        'Generate All Captions'+
+      '</button>';
+    return;
+  }
+  var html = '<div style="margin-bottom:16px"><div style="font-family:\'Bodoni Moda\',serif;font-size:1.1rem;color:var(--ivory);margin-bottom:6px">Captions & Hashtags</div></div>';
+  html += '<div class="caption-section"><h4>Campaign Caption</h4><div class="caption-box">'+campaign.caption+'</div></div>';
+  if(campaign.hashtags && campaign.hashtags.length){
+    html += '<div class="caption-section"><h4>Hashtag Strategy</h4><div class="hashtag-cloud">'+campaign.hashtags.map(function(h){ return '<span class="hashtag">'+h+'</span>'; }).join('')+'</div></div>';
+  }
+  html += '<button class="btn-modal-ghost" style="width:100%;margin-top:8px;font-size:.62rem;padding:8px" onclick="copyCaptions()">Copy All Captions</button>';
+  html += '<button class="ai-gen-btn" style="margin-top:8px" onclick="generateCaptions()"><svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:var(--rose)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Regenerate</button>';
+  content.innerHTML = html;
+}
+
+function renderExportPanel(content){
+  content.innerHTML =
+    '<div style="margin-bottom:16px"><div style="font-family:\'Bodoni Moda\',serif;font-size:1.1rem;color:var(--ivory);margin-bottom:6px">Export Package</div><div style="font-size:.75rem;color:var(--muted);line-height:1.6">Download your complete campaign as a director\'s brief.</div></div>'+
+    '<div class="export-option" onclick="exportCampaignBrief()"><div class="export-icon" style="background:rgba(232,180,184,.1)">📄</div><div class="export-info"><h4>Full Campaign Brief</h4><p>All scenes, prompts, music, shot directions</p></div></div>'+
+    '<div class="export-option" onclick="exportCaptions()"><div class="export-icon" style="background:rgba(201,168,76,.1)">✍️</div><div class="export-info"><h4>Captions & Hashtags</h4><p>Ready to paste into Instagram</p></div></div>'+
+    '<div class="export-option" onclick="exportPrompts()"><div class="export-icon" style="background:rgba(179,157,219,.1)">🤖</div><div class="export-info"><h4>Avatar Prompts Only</h4><p>For AI video generation tools</p></div></div>';
+}
+
+// ── CREATE CAMPAIGN ──
+function createCampaign(){
+  var name = document.getElementById('newCampaignName').value.trim() || 'Untitled Campaign';
+  var goal = document.getElementById('newCampaignGoal').value;
+  var industry = document.getElementById('newCampaignIndustry').value.trim() || 'Brand Development';
+  var numScenes = parseInt(document.getElementById('newCampaignScenes').value);
+
+  var defaultSceneTypes = ['hook','value','social_proof','story','cta','reveal','tutorial','bts','hook','value'];
+  var defaultTitles = [
+    'The Hook — Stop The Scroll',
+    'The Value Drop',
+    'Social Proof Moment',
+    'The Story',
+    'The Call To Action',
+    'The Reveal',
+    'The Tutorial',
+    'Behind The Scenes',
+    'Scene 9',
+    'Scene 10'
+  ];
+
+  var scenes = [];
+  for(var i=0;i<numScenes;i++){
+    scenes.push({
+      title: defaultTitles[i] || 'Scene '+(i+1),
+      type: defaultSceneTypes[i] || 'value',
+      brief:'',
+      duration: i===0 ? 3 : i===numScenes-1 ? 5 : 8,
+      prompt:'',
+      caption:''
+    });
+  }
+
+  var campaign = {
+    id: Date.now().toString(),
+    name: name,
+    goal: goal,
+    industry: industry,
+    scenes: scenes,
+    caption:'',
+    hashtags:[],
+    created: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})
+  };
+
+  state.campaigns.unshift(campaign);
+  saveState();
+  closeModal('newCampaignModal');
+  selectCampaign(campaign.id);
+  // Auto-generate prompts for all scenes
+  setTimeout(function(){ generateFullCampaign(); }, 400);
+}
+
+// ── SCENE OPERATIONS ──
+function addScene(){
+  // Build type pills
+  var pills = document.getElementById('sceneTypePills');
+  pills.innerHTML = SCENE_TYPES.map(function(t){
+    return '<div class="type-pill '+(t.id===selectedSceneType?'selected':'')+'" onclick="selectType(\''+t.id+'\',this)">'+t.label+'</div>';
+  }).join('');
+  document.getElementById('newSceneTitle').value = '';
+  document.getElementById('newSceneBrief').value = '';
+  openModal('addSceneModal');
+}
+
+function selectType(id, el){
+  selectedSceneType = id;
+  document.querySelectorAll('.type-pill').forEach(function(p){ p.classList.remove('selected'); });
+  el.classList.add('selected');
+}
+
+function confirmAddScene(){
+  var campaign = getActiveCampaign();
+  if(!campaign) return;
+  var title = document.getElementById('newSceneTitle').value.trim() || 'New Scene';
+  var brief = document.getElementById('newSceneBrief').value.trim();
+  campaign.scenes.push({
+    title:title, type:selectedSceneType,
+    brief:brief, duration:8, prompt:'', caption:''
+  });
+  saveState();
+  closeModal('addSceneModal');
+  renderCanvas();
+  state.activeSceneIdx = campaign.scenes.length-1;
+  renderCanvas();
+  generateScenePrompt(campaign.scenes.length-1);
+}
+
+function updateScene(idx, field, value){
+  var campaign = getActiveCampaign();
+  if(!campaign) return;
+  campaign.scenes[idx][field] = value;
+  saveState();
+  renderCanvas();
+}
+
+function moveScene(idx, dir){
+  var campaign = getActiveCampaign();
+  if(!campaign) return;
+  var newIdx = idx+dir;
+  if(newIdx<0||newIdx>=campaign.scenes.length) return;
+  var tmp = campaign.scenes[idx];
+  campaign.scenes[idx] = campaign.scenes[newIdx];
+  campaign.scenes[newIdx] = tmp;
+  state.activeSceneIdx = newIdx;
+  saveState();
+  renderCanvas();
+}
+
+function deleteScene(idx){
+  var campaign = getActiveCampaign();
+  if(!campaign) return;
+  campaign.scenes.splice(idx,1);
+  if(state.activeSceneIdx >= campaign.scenes.length) state.activeSceneIdx = campaign.scenes.length-1;
+  saveState();
+  renderCanvas();
+  renderRightPanel();
+}
+
+function renameCampaign(name){
+  var campaign = getActiveCampaign();
+  if(!campaign) return;
+  campaign.name = name;
+  saveState();
+  renderCampaignList();
+}
+
+// ── AI GENERATION ──
+function generateScenePrompt(idx){
+  var campaign = getActiveCampaign();
+  if(!campaign) return;
+  var scene = campaign.scenes[idx];
+  var btn = document.getElementById('genBtn'+idx);
+  if(btn){ btn.disabled=true; btn.innerHTML='<span class="spin">◌</span> Generating...'; }
+
+  callClaude(
+    'You are Glampaign, a luxury Instagram campaign AI for Velocity Agentic.\n\nGenerate a complete SCENE PROMPT for the following:\n\nCampaign: '+campaign.name+'\nGoal: '+campaign.goal.replace(/_/g,' ')+'\nIndustry: '+campaign.industry+'\nScene '+(idx+1)+' of '+campaign.scenes.length+': '+scene.title+'\nScene Type: '+scene.type+'\nScene Brief: '+(scene.brief||'Not specified')+'\nEstimated Duration: '+scene.duration+' seconds\n\nGenerate a detailed director\'s prompt for Amara (luxury, polished, confident brand avatar). Include:\n- Exact opening words/action (first 2 seconds)\n- Shot type and camera angle\n- Setting and background\n- Wardrobe direction\n- Lighting mood\n- Pacing and energy\n- Music mood and BPM\n- One specific song suggestion\n- On-screen text if any\n- How this scene connects to the campaign goal\n\nWrite this as a professional video director\'s brief. Be specific and visual. 150-200 words.',
+    function(text){
+      campaign.scenes[idx].prompt = text;
+      saveState();
+      var box = document.getElementById('genBox'+idx);
+      if(box){ box.textContent = text; box.classList.add('show'); }
+      if(btn){ btn.disabled=false; btn.innerHTML='<svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:var(--rose)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Regenerate Prompt'; }
+      renderCanvas();
+      renderRightPanel();
+    }
+  );
+}
+
+function generateFullCampaign(){
+  var campaign = getActiveCampaign();
+  if(!campaign) return;
+  campaign.scenes.forEach(function(_,idx){
+    setTimeout(function(){ generateScenePrompt(idx); }, idx * 800);
+  });
+  setTimeout(function(){ generateCaptions(); }, campaign.scenes.length * 800 + 500);
+}
+
+function generateCaptions(){
+  var campaign = getActiveCampaign();
+  if(!campaign) return;
+  callClaude(
+    'You are Glampaign, a luxury Instagram campaign AI.\n\nGenerate Instagram captions and hashtag strategy for this campaign:\n\nCampaign: '+campaign.name+'\nGoal: '+campaign.goal.replace(/_/g,' ')+'\nIndustry: '+campaign.industry+'\nScenes: '+campaign.scenes.map(function(s,i){ return (i+1)+'. '+s.title; }).join(', ')+'\n\nGenerate:\n1. A master campaign caption (2-3 sentences, brand voice: luxury, direct, authoritative)\n2. 20 strategic hashtags mixing: 3 mega (1M+), 7 large (100K-1M), 7 medium (10K-100K), 3 niche (under 10K)\n\nRespond ONLY in JSON:\n{"caption":"caption text here","hashtags":["#tag1","#tag2",...]}',
+    function(text){
+      try{
+        var clean = text.replace(/```json|```/g,'').trim();
+        var parsed = JSON.parse(clean);
+        campaign.caption = parsed.caption || '';
+        campaign.hashtags = parsed.hashtags || [];
+      } catch(e){
+        campaign.caption = text.slice(0,200);
+        campaign.hashtags = ['#luxurybrand','#brandstrategy','#contentcreator','#instagrammarketing','#velocityagentic'];
+      }
+      saveState();
+      if(state.activeRPTab === 'caption') renderRightPanel();
+    }
+  );
+}
+
+function callClaude(prompt, callback){
+  fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',
+      max_tokens:1000,
+      messages:[{role:'user',content:prompt}]
+    })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    var text = (data.content||[]).map(function(c){ return c.text||''; }).join('');
+    callback(text);
+  })
+  .catch(function(){
+    callback('Unable to generate at this time. Please try again.');
+  });
+}
+
+// ── COPY / EXPORT ──
+function copyScenePrompt(idx){
+  var campaign = getActiveCampaign();
+  if(!campaign) return;
+  navigator.clipboard.writeText(campaign.scenes[idx].prompt || '');
+  alert('Prompt copied!');
+}
+
+function copyCaptions(){
+  var campaign = getActiveCampaign();
+  if(!campaign) return;
+  var text = campaign.caption + '\n\n' + (campaign.hashtags||[]).join(' ');
+  navigator.clipboard.writeText(text);
+  alert('Captions and hashtags copied!');
+}
+
+function exportCampaignBrief(){
+  var campaign = getActiveCampaign();
+  if(!campaign){ alert('Please select a campaign first.'); return; }
+  var text = 'GLAMPAIGN CAMPAIGN BRIEF\nby Velocity Agentic\n';
+  text += '═'.repeat(50)+'\n\n';
+  text += 'CAMPAIGN: '+campaign.name+'\n';
+  text += 'GOAL: '+campaign.goal.replace(/_/g,' ').toUpperCase()+'\n';
+  text += 'INDUSTRY: '+campaign.industry+'\n';
+  text += 'TOTAL SCENES: '+campaign.scenes.length+'\n';
+  text += 'CREATED: '+campaign.created+'\n\n';
+  text += '═'.repeat(50)+'\n\n';
+  campaign.scenes.forEach(function(s,i){
+    text += 'SCENE '+(i+1)+': '+s.title.toUpperCase()+'\n';
+    text += 'Type: '+s.type+' · Duration: '+s.duration+'s\n';
+    if(s.brief) text += 'Brief: '+s.brief+'\n';
+    text += '\nDIRECTOR\'S PROMPT:\n'+s.prompt+'\n';
+    text += '\n'+'-'.repeat(40)+'\n\n';
+  });
+  if(campaign.caption){
+    text += '═'.repeat(50)+'\n\nCAMPAIGN CAPTION:\n'+campaign.caption+'\n\n';
+    text += 'HASHTAGS:\n'+(campaign.hashtags||[]).join(' ')+'\n';
+  }
+  downloadText(text, campaign.name.replace(/\s+/g,'-')+'-glampaign-brief.txt');
+  closeModal('exportModal');
+}
+
+function exportCaptions(){
+  var campaign = getActiveCampaign();
+  if(!campaign){ alert('Please select a campaign first.'); return; }
+  var text = 'GLAMPAIGN CAPTIONS\n'+campaign.name+'\n\n';
+  text += 'CAMPAIGN CAPTION:\n'+campaign.caption+'\n\n';
+  text += 'HASHTAGS:\n'+(campaign.hashtags||[]).join(' ')+'\n\n';
+  text += 'SCENE CAPTIONS:\n';
+  campaign.scenes.forEach(function(s,i){
+    text += '\nScene '+(i+1)+' — '+s.title+':\n'+(s.caption || '[Not yet generated]')+'\n';
+  });
+  downloadText(text, campaign.name.replace(/\s+/g,'-')+'-captions.txt');
+  closeModal('exportModal');
+}
+
+function exportPrompts(){
+  var campaign = getActiveCampaign();
+  if(!campaign){ alert('Please select a campaign first.'); return; }
+  var text = 'GLAMPAIGN — AMARA AVATAR PROMPTS\n'+campaign.name+'\n\n';
+  campaign.scenes.forEach(function(s,i){
+    text += 'SCENE '+(i+1)+': '+s.title+'\n';
+    text += s.prompt || '[Not yet generated]';
+    text += '\n\n'+'─'.repeat(40)+'\n\n';
+  });
+  downloadText(text, campaign.name.replace(/\s+/g,'-')+'-prompts.txt');
+  closeModal('exportModal');
+}
+
+function downloadText(text, filename){
+  var blob = new Blob([text], {type:'text/plain'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ── MODALS ──
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+function openNewCampaignModal(){
+  document.getElementById('newCampaignName').value = '';
+  document.getElementById('newCampaignIndustry').value = '';
+  openModal('newCampaignModal');
+}
+function openExportModal(){ openModal('exportModal'); }
+
+// ── INIT ──
+renderCampaignList();
+renderCanvas();
+renderRightPanel();
+</script>
+</body>
+</html>
