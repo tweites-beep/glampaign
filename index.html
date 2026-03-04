@@ -3,1241 +3,604 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Glampaign — Campaign Studio</title>
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;1,400;1,500&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet"/>
+<title>Glampaign — Brand Deal Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Tenor+Sans&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --ink:#09080c;
-  --deep:#100e16;
-  --surface:#16131f;
-  --card:#1c1927;
-  --card2:#221f30;
-  --border:rgba(255,255,255,.07);
-  --border2:rgba(255,255,255,.13);
-  --rose:#e8b4b8;
-  --rose2:#f5d5d8;
-  --gold:#c9a84c;
-  --gold2:#e8c97a;
-  --sage:#8fb5a0;
-  --violet:#b39ddb;
-  --ivory:#f7f0e8;
-  --muted:#7a7490;
-  --text:#c5bdd8;
+  --black:#06050a;--deep:#0c0b12;--surface:#12101a;--card:#181622;--card2:#1e1b2a;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);
+  --gold:#c9a84c;--gold2:#e8c97a;--champagne:#f5e6c8;--ivory:#f7f0e6;
+  --muted:#6e6882;--text:#c2bacf;--rose:#d4a5a5;
 }
+html,body{height:100%;overflow:hidden}
+body{background:var(--black);color:var(--text);font-family:'Jost',sans-serif;font-weight:300}
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 50% at 15% 15%,rgba(201,168,76,.05) 0%,transparent 55%),
+    radial-gradient(ellipse 50% 40% at 85% 85%,rgba(212,165,165,.04) 0%,transparent 50%)}
 
-body{
-  background:var(--ink);
-  color:var(--text);
-  font-family:'Outfit',sans-serif;
-  font-weight:300;
-  min-height:100vh;
-  overflow-x:hidden;
-}
+/* TOPNAV */
+.topnav{position:relative;z-index:200;height:56px;background:rgba(6,5,10,.9);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 28px;gap:16px}
+.nav-diamond{width:22px;height:22px;background:linear-gradient(135deg,var(--gold),var(--champagne));
+  clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);flex-shrink:0}
+.nav-name{font-family:'Cormorant Garamond',serif;font-size:1.05rem;letter-spacing:.12em;color:var(--ivory)}
+.nav-name em{font-style:italic;color:var(--gold)}
+.nav-sub{font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);
+  padding-left:14px;border-left:1px solid var(--border2)}
+.nav-right{margin-left:auto;display:flex;gap:8px}
+.npill{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;padding:5px 14px;border-radius:20px;
+  border:1px solid var(--border2);color:var(--muted);cursor:pointer;background:none;
+  font-family:'Jost',sans-serif;transition:all .2s}
+.npill:hover{color:var(--text)}
+.npill.gold{background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(232,201,122,.08));
+  border-color:rgba(201,168,76,.3);color:var(--gold2)}
+.npill.gold:hover{background:linear-gradient(135deg,rgba(201,168,76,.22),rgba(232,201,122,.14))}
 
-/* ── BACKGROUND ── */
-.bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.bg-mesh{
-  position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse 80% 50% at 20% 20%,rgba(232,180,184,.06) 0%,transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 80%,rgba(201,168,76,.05) 0%,transparent 55%),
-    radial-gradient(ellipse 40% 60% at 60% 30%,rgba(179,157,219,.04) 0%,transparent 50%);
-}
-.bg-lines{
-  position:absolute;inset:0;
-  background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px);
-  background-size:100% 64px;
-}
+/* LAYOUT */
+.studio{display:flex;height:calc(100vh - 56px);position:relative;z-index:1}
 
-/* ── TOPNAV ── */
-.topnav{
-  position:sticky;top:0;z-index:300;
-  height:58px;
-  background:rgba(9,8,12,.82);
-  backdrop-filter:blur(24px);
-  border-bottom:1px solid var(--border);
-  display:flex;align-items:center;
-  padding:0 32px;gap:0;
-}
-.nav-brand{
-  display:flex;align-items:center;gap:11px;
-  text-decoration:none;
-}
-.nav-brand-gem{
-  width:28px;height:28px;
-  background:linear-gradient(135deg,var(--rose),var(--gold));
-  clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);
-  flex-shrink:0;
-}
-.nav-brand-name{
-  font-family:'Bodoni Moda',serif;
-  font-size:1.05rem;letter-spacing:.08em;
-  color:var(--ivory);
-}
-.nav-brand-name span{color:var(--rose);font-style:italic}
-.nav-brand-sub{
-  font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;
-  color:var(--muted);margin-left:14px;padding-left:14px;
-  border-left:1px solid var(--border2);
-}
-.nav-actions{margin-left:auto;display:flex;align-items:center;gap:10px}
-.nav-btn{
-  background:none;border:1px solid var(--border2);
-  color:var(--muted);border-radius:3px;
-  padding:6px 14px;font-family:'Outfit',sans-serif;
-  font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;
-  cursor:pointer;transition:all .2s;
-}
-.nav-btn:hover{color:var(--rose);border-color:rgba(232,180,184,.3)}
-.nav-btn.primary{
-  background:linear-gradient(135deg,rgba(232,180,184,.15),rgba(201,168,76,.1));
-  border-color:rgba(232,180,184,.3);color:var(--rose2);
-}
-.nav-btn.primary:hover{background:linear-gradient(135deg,rgba(232,180,184,.25),rgba(201,168,76,.15))}
+/* LEFT PANEL */
+.lp{width:290px;flex-shrink:0;background:var(--deep);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden}
+.lp-head{padding:20px 20px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
+.lp-head h2{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:400;
+  color:var(--ivory);letter-spacing:.06em;margin-bottom:3px}
+.lp-head h2 em{font-style:italic;color:var(--gold)}
+.lp-head p{font-size:.7rem;color:var(--muted);line-height:1.6}
+.lp-body{flex:1;overflow-y:auto;padding:16px 18px}
+.lp-body::-webkit-scrollbar{width:3px}
+.lp-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.f{margin-bottom:14px}
+.f label{display:block;font-size:.57rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.f input,.f textarea,.f select{width:100%;background:var(--surface);border:1px solid var(--border);
+  border-radius:3px;padding:8px 10px;font-family:'Jost',sans-serif;font-size:.8rem;
+  color:var(--ivory);outline:none;transition:border-color .2s;letter-spacing:.02em}
+.f textarea{resize:vertical;min-height:66px;line-height:1.6}
+.f input::placeholder,.f textarea::placeholder{color:var(--muted)}
+.f input:focus,.f textarea:focus,.f select:focus{border-color:rgba(201,168,76,.35)}
+.f select{cursor:pointer}.f select option{background:var(--card)}
+.brand-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.btag{font-size:.6rem;letter-spacing:.06em;padding:3px 9px;border-radius:2px;
+  border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .18s}
+.btag:hover{border-color:rgba(201,168,76,.3);color:var(--gold)}
+.btag.on{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.08)}
+.lp-foot{padding:14px 18px;border-top:1px solid var(--border);flex-shrink:0}
+.build-btn{width:100%;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;
+  border:none;border-radius:3px;padding:12px;font-family:'Jost',sans-serif;
+  font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;
+  font-weight:500;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px}
+.build-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(201,168,76,.25)}
+.build-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.build-btn svg{width:13px;height:13px;fill:#000}
 
-/* ── LAYOUT ── */
-.app{display:flex;height:calc(100vh - 58px);position:relative;z-index:1}
-
-/* ── LEFT SIDEBAR ── */
-.sidebar{
-  width:280px;flex-shrink:0;
-  background:var(--deep);
-  border-right:1px solid var(--border);
-  display:flex;flex-direction:column;
-  overflow:hidden;
-}
-.sidebar-section{
-  padding:20px 20px 0;
-}
-.sidebar-label{
-  font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;
-  color:var(--muted);margin-bottom:12px;
-  display:flex;align-items:center;gap:8px;
-}
-.sidebar-label::after{content:'';flex:1;height:1px;background:var(--border)}
-
-/* Campaign list */
-.campaign-list{
-  flex:1;overflow-y:auto;padding:0 12px 12px;
-}
-.campaign-list::-webkit-scrollbar{width:4px}
-.campaign-list::-webkit-scrollbar-track{background:transparent}
-.campaign-list::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-
-.campaign-item{
-  padding:12px 14px;border-radius:5px;
-  cursor:pointer;transition:all .18s;
-  margin-bottom:4px;border:1px solid transparent;
-  position:relative;
-}
-.campaign-item:hover{background:var(--surface);border-color:var(--border)}
-.campaign-item.active{background:var(--card);border-color:rgba(232,180,184,.2)}
-.ci-name{font-size:.82rem;color:var(--ivory);letter-spacing:.02em;
+/* CENTER MOODBOARD */
+.mb-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.mb-bar{height:46px;flex-shrink:0;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 18px;gap:10px;background:rgba(12,11,18,.6)}
+.mb-title{font-family:'Cormorant Garamond',serif;font-size:.92rem;color:var(--ivory);font-style:italic;letter-spacing:.06em}
+.mb-ct{font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+  background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:2px 7px}
+.mb-acts{margin-left:auto;display:flex;gap:7px}
+.mbbtn{background:none;border:1px solid var(--border);color:var(--muted);border-radius:2px;
+  padding:5px 11px;font-family:'Jost',sans-serif;font-size:.58rem;letter-spacing:.12em;
+  text-transform:uppercase;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:4px}
+.mbbtn svg{width:10px;height:10px;fill:currentColor}
+.mbbtn:hover{color:var(--text);border-color:var(--border2)}
+.mbbtn.gold{border-color:rgba(201,168,76,.3);color:var(--gold)}
+.mbbtn.gold:hover{background:rgba(201,168,76,.08)}
+.moodboard{flex:1;overflow-y:auto;padding:20px;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;align-content:start}
+.moodboard::-webkit-scrollbar{width:4px}
+.moodboard::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.upload-zone{grid-column:1/-1;border:2px dashed rgba(201,168,76,.18);border-radius:6px;
+  padding:32px 20px;text-align:center;cursor:pointer;transition:all .25s;
+  background:rgba(201,168,76,.02);position:relative}
+.upload-zone:hover,.upload-zone.drag{border-color:rgba(201,168,76,.4);background:rgba(201,168,76,.05)}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.uz-ic{width:44px;height:44px;border-radius:50%;border:1px solid rgba(201,168,76,.2);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.uz-ic svg{width:18px;height:18px;fill:rgba(201,168,76,.5)}
+.uz-t{font-size:.85rem;color:var(--ivory);margin-bottom:3px;letter-spacing:.04em}
+.uz-s{font-size:.68rem;color:var(--muted)}
+.img-tile{background:var(--card);border:1px solid var(--border);border-radius:5px;overflow:hidden;
+  cursor:pointer;transition:all .2s;animation:popIn .3s ease both;position:relative}
+.img-tile:hover{border-color:rgba(201,168,76,.3);transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.4)}
+.img-tile.sel{border-color:var(--gold);box-shadow:0 0 0 2px rgba(201,168,76,.2)}
+.tile-img{position:relative;overflow:hidden;aspect-ratio:3/4;background:var(--card2)}
+.tile-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+.img-tile:hover .tile-img img{transform:scale(1.04)}
+.tile-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(6,5,10,.85) 0%,transparent 50%);
+  opacity:0;transition:opacity .25s}
+.img-tile:hover .tile-ov{opacity:1}
+.tile-num{position:absolute;top:7px;left:8px;font-size:.54rem;letter-spacing:.16em;text-transform:uppercase;
+  background:rgba(6,5,10,.8);border:1px solid rgba(201,168,76,.3);color:var(--gold);padding:2px 7px;border-radius:2px}
+.tile-st{position:absolute;top:7px;right:8px;width:18px;height:18px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:.55rem}
+.tile-st.p{background:rgba(201,168,76,.2);color:var(--gold)}
+.tile-st.d{background:rgba(74,124,89,.3);color:#6aad80}
+.tile-rm{position:absolute;bottom:7px;right:7px;background:rgba(6,5,10,.7);border:none;
+  color:var(--muted);font-size:.8rem;width:22px;height:22px;border-radius:50%;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;opacity:0;transition:all .2s;z-index:2}
+.img-tile:hover .tile-rm{opacity:1}
+.tile-rm:hover{color:#ff6b6b}
+.tile-body{padding:9px 11px 11px}
+.tile-lbl{font-size:.68rem;color:var(--ivory);letter-spacing:.03em;margin-bottom:3px;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ci-meta{font-size:.62rem;color:var(--muted);margin-top:3px;letter-spacing:.04em}
-.ci-scenes{
-  position:absolute;top:10px;right:10px;
-  font-size:.58rem;letter-spacing:.08em;
-  color:var(--rose);background:rgba(232,180,184,.1);
-  border-radius:10px;padding:2px 7px;
-}
-.campaign-item.active .ci-scenes{background:rgba(232,180,184,.18)}
+.tile-prev{font-size:.6rem;color:var(--muted);line-height:1.4;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:26px}
+.tile-prev.gen{color:var(--gold);opacity:.8}
 
-.new-campaign-btn{
-  margin:0 12px 16px;
-  background:linear-gradient(135deg,rgba(232,180,184,.1),rgba(201,168,76,.06));
-  border:1px dashed rgba(232,180,184,.25);
-  border-radius:5px;padding:12px;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  cursor:pointer;transition:all .2s;
-  font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--rose);font-family:'Outfit',sans-serif;
-}
-.new-campaign-btn:hover{background:linear-gradient(135deg,rgba(232,180,184,.16),rgba(201,168,76,.1));border-style:solid}
-.new-campaign-btn svg{width:14px;height:14px;fill:var(--rose)}
+/* RIGHT PANEL */
+.rp{width:310px;flex-shrink:0;background:var(--deep);border-left:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden}
+.rp-head{padding:14px 18px;border-bottom:1px solid var(--border);flex-shrink:0}
+.rp-head h3{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:400;
+  color:var(--ivory);letter-spacing:.06em;margin-bottom:2px}
+.rp-head h3 em{font-style:italic;color:var(--gold)}
+.rp-head p{font-size:.66rem;color:var(--muted)}
+.rp-body{flex:1;overflow-y:auto;padding:16px 18px}
+.rp-body::-webkit-scrollbar{width:3px}
+.rp-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.sel-prev{aspect-ratio:3/4;background:var(--surface);border-radius:4px;overflow:hidden;
+  margin-bottom:14px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center}
+.sel-prev img{width:100%;height:100%;object-fit:cover}
+.sel-prev-empty{text-align:center;padding:20px}
+.sel-prev-empty svg{width:24px;height:24px;fill:var(--muted);opacity:.4;margin-bottom:6px}
+.sel-prev-empty p{font-size:.66rem;color:var(--muted);letter-spacing:.06em}
+.sug-box{background:var(--surface);border:1px solid rgba(201,168,76,.2);border-radius:3px;
+  padding:12px;margin-bottom:12px;border-left:2px solid var(--gold);display:none}
+.sug-box.show{display:block}
+.sug-lbl{font-size:.54rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.sug-txt{font-size:.73rem;color:var(--text);line-height:1.7}
+.fld-lbl{font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;display:block}
+.fld-ta{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:3px;
+  padding:9px 11px;font-family:'Jost',sans-serif;font-size:.76rem;color:var(--ivory);outline:none;
+  transition:border-color .2s;resize:vertical;min-height:88px;line-height:1.6;margin-bottom:9px}
+.fld-ta::placeholder{color:var(--muted)}
+.fld-ta:focus{border-color:rgba(201,168,76,.35)}
+.gen-btn{width:100%;background:linear-gradient(135deg,rgba(201,168,76,.1),rgba(232,201,122,.06));
+  border:1px solid rgba(201,168,76,.22);border-radius:3px;padding:9px;font-family:'Jost',sans-serif;
+  font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold2);cursor:pointer;
+  transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:7px}
+.gen-btn:hover{background:linear-gradient(135deg,rgba(201,168,76,.18),rgba(232,201,122,.1))}
+.gen-btn:disabled{opacity:.35;cursor:not-allowed}
+.gen-btn svg{width:11px;height:11px;fill:var(--gold)}
+.div-line{height:1px;background:var(--border);margin:12px 0;
+  display:flex;align-items:center;justify-content:center}
+.div-line::before{content:'✦';background:var(--deep);padding:0 7px;font-size:.48rem;color:var(--muted)}
+.out-box{background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:11px;
+  font-size:.73rem;color:var(--text);line-height:1.7;margin-bottom:9px;display:none;white-space:pre-wrap}
+.out-box.show{display:block}
+.copy-btn{width:100%;background:none;border:1px solid var(--border);color:var(--muted);
+  border-radius:2px;padding:6px;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;
+  cursor:pointer;transition:all .2s;font-family:'Jost',sans-serif;margin-bottom:5px}
+.copy-btn:hover{color:var(--text);border-color:var(--border2)}
 
-/* ── MAIN CANVAS ── */
-.canvas{
-  flex:1;display:flex;flex-direction:column;
-  overflow:hidden;background:var(--surface);
-}
+/* DECK OVERLAY */
+.deck-ov{position:fixed;inset:0;background:rgba(3,2,6,.96);backdrop-filter:blur(16px);
+  z-index:500;display:none;flex-direction:column;align-items:center;overflow:hidden}
+.deck-ov.open{display:flex}
+.deck-bar{width:100%;height:50px;flex-shrink:0;background:rgba(6,5,10,.8);
+  border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 22px;gap:10px}
+.deck-bar h3{font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--ivory);font-style:italic}
+.deck-xbtn{margin-left:auto;background:none;border:1px solid var(--border2);color:var(--muted);
+  border-radius:2px;padding:5px 13px;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;
+  cursor:pointer;font-family:'Jost',sans-serif;transition:all .2s}
+.deck-xbtn:hover{color:var(--text)}
+.deck-expbtn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;
+  border-radius:2px;padding:6px 15px;font-family:'Jost',sans-serif;font-size:.58rem;
+  letter-spacing:.14em;text-transform:uppercase;cursor:pointer;font-weight:500}
+.deck-slides{flex:1;overflow-y:auto;width:100%;padding:28px 20px;
+  display:flex;flex-direction:column;align-items:center;gap:20px}
+.deck-slides::-webkit-scrollbar{width:4px}
+.deck-slides::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.ds{width:100%;max-width:860px;background:var(--card);border:1px solid var(--border);
+  border-radius:6px;overflow:hidden;animation:fadeUp .4s ease both}
 
-/* Canvas topbar */
-.canvas-bar{
-  height:52px;flex-shrink:0;
-  border-bottom:1px solid var(--border);
-  display:flex;align-items:center;
-  padding:0 24px;gap:14px;
-  background:var(--deep);
-}
-.canvas-title-wrap{flex:1}
-.canvas-campaign-name{
-  font-family:'Bodoni Moda',serif;
-  font-size:1rem;color:var(--ivory);letter-spacing:.04em;
-  background:none;border:none;outline:none;
-  width:100%;cursor:text;
-}
-.canvas-campaign-name::placeholder{color:var(--muted)}
-.canvas-meta{font-size:.6rem;color:var(--muted);margin-top:1px;letter-spacing:.06em}
-.canvas-bar-actions{display:flex;gap:8px;align-items:center}
-.cb-btn{
-  background:none;border:1px solid var(--border);
-  color:var(--muted);border-radius:3px;padding:5px 12px;
-  font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;
-  cursor:pointer;transition:all .2s;font-family:'Outfit',sans-serif;
-  display:flex;align-items:center;gap:6px;
-}
-.cb-btn svg{width:11px;height:11px;fill:currentColor}
-.cb-btn:hover{color:var(--text);border-color:var(--border2)}
-.cb-btn.rose{border-color:rgba(232,180,184,.25);color:var(--rose)}
-.cb-btn.rose:hover{background:rgba(232,180,184,.08)}
+/* Slide styles */
+.s-cover{background:linear-gradient(135deg,var(--deep) 0%,#0a0814 100%);padding:56px 48px;
+  min-height:380px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.s-cover::before{content:'';position:absolute;top:-80px;right:-80px;width:440px;height:440px;
+  background:radial-gradient(ellipse,rgba(201,168,76,.08) 0%,transparent 60%)}
+.s-cover::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(to right,transparent,rgba(201,168,76,.4),transparent)}
+.cover-ey{font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);
+  margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.cover-ey::before{content:'';width:20px;height:1px;background:var(--gold);opacity:.6}
+.cover-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4.5vw,3.6rem);
+  font-weight:300;color:var(--ivory);letter-spacing:.04em;line-height:1.1;margin-bottom:14px}
+.cover-h1 em{font-style:italic;color:var(--gold2)}
+.cover-sub{font-size:.82rem;color:var(--muted);line-height:1.8;max-width:460px}
+.cover-line{margin-top:32px;display:flex;align-items:center;gap:14px;
+  font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.cover-line::before,.cover-line::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.05)}
+.s-label{font-size:.56rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);
+  margin-bottom:16px;display:flex;align-items:center;gap:9px}
+.s-label::after{content:'';flex:1;height:1px;background:rgba(201,168,76,.2)}
+.s-h2{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--ivory);
+  font-weight:300;letter-spacing:.06em;margin-bottom:20px}
+.s-h2 em{font-style:italic;color:var(--gold2)}
+.s-mood{padding:32px 36px}
+.deck-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.deck-grid img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:3px;border:1px solid var(--border)}
+.s-scene{display:grid;grid-template-columns:1fr 1fr;min-height:300px}
+.ss-img{overflow:hidden}
+.ss-img img{width:100%;height:100%;object-fit:cover;display:block}
+.ss-con{padding:28px 32px;display:flex;flex-direction:column;justify-content:center;
+  background:linear-gradient(135deg,var(--card),var(--card2))}
+.ss-num{font-size:.53rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.ss-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;
+  color:var(--ivory);letter-spacing:.04em;line-height:1.2;margin-bottom:10px}
+.ss-dir{font-size:.73rem;color:var(--muted);line-height:1.8;margin-bottom:14px;flex:1}
+.ss-cap{font-size:.7rem;color:var(--text);line-height:1.7;background:rgba(255,255,255,.03);
+  border-radius:3px;padding:9px 11px;border-left:2px solid var(--gold);font-style:italic}
+.s-align{padding:36px 44px}
+.align-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.abox{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:18px}
+.abox-lbl{font-size:.56rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.abox-txt{font-size:.76rem;color:var(--text);line-height:1.7}
+.s-del{padding:36px 44px}
+.del-list{margin-top:16px;display:flex;flex-direction:column;gap:9px}
+.del-item{display:flex;align-items:flex-start;gap:12px;padding:13px 16px;
+  background:var(--surface);border:1px solid var(--border);border-radius:4px}
+.del-n{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--gold);flex-shrink:0;line-height:1}
+.del-i h4{font-size:.8rem;color:var(--ivory);margin-bottom:2px;letter-spacing:.03em}
+.del-i p{font-size:.68rem;color:var(--muted);line-height:1.5}
+.s-contact{padding:48px 44px;background:linear-gradient(135deg,#0a0814,var(--deep));
+  text-align:center;min-height:240px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;position:relative}
+.s-contact::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 55% 50% at 50% 50%,rgba(201,168,76,.06),transparent 65%)}
+.c-gem{width:36px;height:36px;background:linear-gradient(135deg,var(--gold),var(--gold2));
+  clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);margin:0 auto 18px;position:relative;z-index:1}
+.c-name{font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--ivory);
+  font-weight:300;letter-spacing:.08em;margin-bottom:6px;position:relative;z-index:1}
+.c-title{font-size:.68rem;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;position:relative;z-index:1}
+.c-email{margin-top:14px;font-size:.8rem;color:var(--gold2);letter-spacing:.08em;position:relative;z-index:1}
 
-/* ── STORYBOARD CANVAS ── */
-.storyboard{
-  flex:1;overflow-y:auto;
-  padding:28px 24px;
-}
-.storyboard::-webkit-scrollbar{width:5px}
-.storyboard::-webkit-scrollbar-track{background:transparent}
-.storyboard::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+/* LOADING */
+.load-ov{position:fixed;inset:0;background:rgba(6,5,10,.92);z-index:400;
+  display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.load-ov.show{display:flex}
+.load-ring{width:44px;height:44px;border:2px solid var(--border2);border-top-color:var(--gold);
+  border-radius:50%;animation:spin 1s linear infinite}
+.load-txt{font-size:.72rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}
+.load-sub{font-size:.62rem;color:rgba(110,104,130,.5);letter-spacing:.08em}
 
-/* Empty state */
-.empty-state{
-  height:100%;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  text-align:center;padding:40px;
-}
-.empty-gem{
-  width:64px;height:64px;
-  background:linear-gradient(135deg,rgba(232,180,184,.15),rgba(201,168,76,.08));
-  clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);
-  margin:0 auto 20px;
-  display:flex;align-items:center;justify-content:center;
-}
-.empty-state h2{
-  font-family:'Bodoni Moda',serif;
-  font-size:1.6rem;font-weight:400;
-  color:var(--ivory);margin-bottom:10px;letter-spacing:.04em;
-}
-.empty-state h2 em{font-style:italic;color:var(--rose)}
-.empty-state p{font-size:.82rem;color:var(--muted);line-height:1.8;max-width:400px;margin-bottom:28px}
-
-/* Scene cards row */
-.scenes-row{
-  display:flex;gap:16px;
-  flex-wrap:wrap;
-  align-content:flex-start;
-}
-
-/* Scene card */
-.scene-card{
-  width:220px;flex-shrink:0;
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:7px;overflow:hidden;
-  transition:all .2s;
-  position:relative;
-  animation:popIn .3s ease both;
-  cursor:pointer;
-}
-.scene-card:hover{border-color:rgba(232,180,184,.25);transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,.3)}
-.scene-card.active-scene{border-color:rgba(232,180,184,.5);box-shadow:0 0 0 2px rgba(232,180,184,.15)}
-
-/* Scene thumbnail */
-.scene-thumb{
-  height:130px;
-  background:linear-gradient(135deg,var(--card2),var(--deep));
-  position:relative;overflow:hidden;
-  display:flex;align-items:center;justify-content:center;
-}
-.scene-thumb-bg{
-  position:absolute;inset:0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:2.2rem;opacity:.3;
-}
-.scene-num{
-  position:absolute;top:8px;left:10px;
-  font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--rose);background:rgba(9,8,12,.7);
-  padding:2px 7px;border-radius:2px;
-}
-.scene-type-badge{
-  position:absolute;bottom:8px;right:8px;
-  font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;
-  padding:3px 8px;border-radius:2px;
-}
-.scene-card-body{padding:12px 14px 14px}
-.scene-title{
-  font-size:.82rem;color:var(--ivory);
-  letter-spacing:.02em;line-height:1.3;
-  margin-bottom:5px;
-}
-.scene-duration{font-size:.62rem;color:var(--muted);letter-spacing:.06em}
-.scene-preview{
-  font-size:.7rem;color:var(--muted);
-  line-height:1.5;margin-top:6px;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
-}
-.scene-actions{
-  display:flex;gap:6px;margin-top:10px;
-  padding-top:10px;border-top:1px solid var(--border);
-}
-.scene-act-btn{
-  flex:1;background:none;border:1px solid var(--border);
-  color:var(--muted);border-radius:2px;padding:5px;
-  font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;
-  cursor:pointer;transition:all .18s;font-family:'Outfit',sans-serif;
-  display:flex;align-items:center;justify-content:center;gap:4px;
-}
-.scene-act-btn svg{width:10px;height:10px;fill:currentColor}
-.scene-act-btn:hover{color:var(--rose);border-color:rgba(232,180,184,.3)}
-.scene-act-btn.danger:hover{color:#ff6b6b;border-color:rgba(255,107,107,.3)}
-
-/* Add scene card */
-.add-scene-card{
-  width:220px;flex-shrink:0;
-  height:240px;
-  border:2px dashed rgba(232,180,184,.15);
-  border-radius:7px;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:10px;
-  cursor:pointer;transition:all .2s;
-  color:var(--muted);
-}
-.add-scene-card:hover{border-color:rgba(232,180,184,.35);color:var(--rose);background:rgba(232,180,184,.03)}
-.add-scene-card svg{width:20px;height:20px;fill:currentColor;opacity:.6}
-.add-scene-card span{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase}
-
-/* Campaign summary bar */
-.campaign-summary{
-  border-top:1px solid var(--border);
-  padding:12px 24px;
-  background:var(--deep);
-  display:flex;gap:24px;align-items:center;
-  flex-shrink:0;
-}
-.cs-stat{display:flex;align-items:center;gap:8px}
-.cs-stat-num{
-  font-family:'Bodoni Moda',serif;
-  font-size:1.1rem;color:var(--gold2);
-}
-.cs-stat-label{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-.cs-divider{width:1px;height:24px;background:var(--border)}
-
-/* ── RIGHT PANEL ── */
-.right-panel{
-  width:340px;flex-shrink:0;
-  background:var(--deep);
-  border-left:1px solid var(--border);
-  display:flex;flex-direction:column;
-  overflow:hidden;
-}
-.rp-tabs{
-  display:flex;border-bottom:1px solid var(--border);flex-shrink:0;
-}
-.rp-tab{
-  flex:1;padding:13px 8px;text-align:center;
-  font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--muted);cursor:pointer;transition:all .2s;
-  border-bottom:2px solid transparent;
-}
-.rp-tab.active{color:var(--rose);border-bottom-color:var(--rose)}
-.rp-tab:hover:not(.active){color:var(--text)}
-
-.rp-content{flex:1;overflow-y:auto;padding:20px}
-.rp-content::-webkit-scrollbar{width:4px}
-.rp-content::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-
-/* Scene editor */
-.field-group{margin-bottom:18px}
-.field-label{
-  font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--muted);margin-bottom:7px;display:block;
-}
-.field-input,.field-textarea,.field-select{
-  width:100%;background:var(--surface);
-  border:1px solid var(--border);border-radius:4px;
-  padding:10px 12px;
-  font-family:'Outfit',sans-serif;font-size:.82rem;
-  color:var(--ivory);outline:none;
-  transition:border-color .2s;
-  letter-spacing:.02em;
-}
-.field-textarea{resize:vertical;min-height:80px;line-height:1.6}
-.field-input:focus,.field-textarea:focus,.field-select:focus{border-color:rgba(232,180,184,.4)}
-.field-input::placeholder,.field-textarea::placeholder{color:var(--muted)}
-.field-select{cursor:pointer}
-.field-select option{background:var(--card)}
-
-/* Scene type pills */
-.type-pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
-.type-pill{
-  padding:5px 12px;border-radius:20px;
-  border:1px solid var(--border);
-  font-size:.62rem;letter-spacing:.1em;
-  cursor:pointer;transition:all .18s;color:var(--muted);
-}
-.type-pill:hover{border-color:var(--border2);color:var(--text)}
-.type-pill.selected{border-color:rgba(232,180,184,.4);color:var(--rose);background:rgba(232,180,184,.08)}
-
-/* AI Generate button */
-.ai-gen-btn{
-  width:100%;
-  background:linear-gradient(135deg,rgba(232,180,184,.12),rgba(201,168,76,.08));
-  border:1px solid rgba(232,180,184,.25);
-  border-radius:4px;padding:12px;
-  font-family:'Outfit',sans-serif;font-size:.72rem;
-  letter-spacing:.14em;text-transform:uppercase;
-  color:var(--rose2);cursor:pointer;transition:all .2s;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  margin-bottom:14px;
-}
-.ai-gen-btn:hover{background:linear-gradient(135deg,rgba(232,180,184,.2),rgba(201,168,76,.12));transform:translateY(-1px)}
-.ai-gen-btn svg{width:14px;height:14px;fill:var(--rose)}
-.ai-gen-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
-
-/* Generated content box */
-.gen-box{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:4px;padding:14px;margin-bottom:14px;
-  font-size:.78rem;color:var(--text);line-height:1.7;
-  border-left:2px solid var(--rose);
-  white-space:pre-wrap;display:none;
-}
-.gen-box.show{display:block}
-
-/* Caption panel */
-.caption-section{margin-bottom:20px}
-.caption-section h4{
-  font-family:'Bodoni Moda',serif;
-  font-size:.95rem;color:var(--ivory);font-weight:400;
-  margin-bottom:10px;letter-spacing:.04em;
-}
-.caption-box{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:4px;padding:14px;
-  font-size:.78rem;color:var(--text);line-height:1.8;
-  white-space:pre-wrap;min-height:60px;
-}
-.hashtag-cloud{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.hashtag{
-  font-size:.65rem;letter-spacing:.04em;
-  color:var(--violet);background:rgba(179,157,219,.08);
-  border:1px solid rgba(179,157,219,.18);
-  border-radius:3px;padding:3px 8px;cursor:pointer;
-  transition:all .18s;
-}
-.hashtag:hover{background:rgba(179,157,219,.15)}
-
-/* Export panel */
-.export-option{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:5px;padding:16px;margin-bottom:10px;
-  cursor:pointer;transition:all .2s;
-  display:flex;align-items:flex-start;gap:12px;
-}
-.export-option:hover{border-color:rgba(232,180,184,.25);background:var(--card2)}
-.export-icon{
-  width:36px;height:36px;border-radius:4px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.1rem;flex-shrink:0;
-}
-.export-info h4{font-size:.82rem;color:var(--ivory);margin-bottom:3px;letter-spacing:.02em}
-.export-info p{font-size:.68rem;color:var(--muted);line-height:1.5}
-
-/* Loading spinner */
-.spin{animation:spin 1s linear infinite;display:inline-block}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* ── MODALS ── */
-.modal-overlay{
-  position:fixed;inset:0;background:rgba(5,4,8,.88);
-  backdrop-filter:blur(12px);z-index:500;
-  display:flex;align-items:center;justify-content:center;padding:24px;
-  opacity:0;pointer-events:none;transition:opacity .25s;
-}
-.modal-overlay.open{opacity:1;pointer-events:all}
-.modal{
-  background:var(--card);border:1px solid rgba(232,180,184,.2);
-  border-radius:8px;width:100%;max-width:520px;
-  padding:32px;
-  transform:translateY(16px);transition:transform .3s cubic-bezier(.4,0,.2,1);
-  position:relative;
-}
-.modal-overlay.open .modal{transform:translateY(0)}
-.modal-close{
-  position:absolute;top:14px;right:16px;
-  background:none;border:none;color:var(--muted);
-  font-size:1.3rem;cursor:pointer;transition:color .2s;
-}
-.modal-close:hover{color:var(--ivory)}
-.modal h2{
-  font-family:'Bodoni Moda',serif;
-  font-size:1.4rem;font-weight:400;color:var(--ivory);
-  margin-bottom:6px;letter-spacing:.04em;
-}
-.modal h2 em{font-style:italic;color:var(--rose)}
-.modal p{font-size:.8rem;color:var(--muted);margin-bottom:22px;line-height:1.7}
-.modal-actions{display:flex;gap:10px;margin-top:20px;justify-content:flex-end}
-.btn-modal-primary{
-  background:linear-gradient(135deg,var(--rose),var(--gold));
-  color:#000;border:none;border-radius:3px;
-  padding:10px 22px;font-family:'Outfit',sans-serif;
-  font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
-  cursor:pointer;font-weight:500;transition:all .2s;
-}
-.btn-modal-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(232,180,184,.3)}
-.btn-modal-ghost{
-  background:none;border:1px solid var(--border2);
-  color:var(--muted);border-radius:3px;
-  padding:10px 22px;font-family:'Outfit',sans-serif;
-  font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
-  cursor:pointer;transition:all .2s;
-}
-.btn-modal-ghost:hover{color:var(--text);border-color:var(--border2)}
-
-/* ── ANIMATIONS ── */
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-@keyframes popIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-
-/* ── MOBILE ── */
-@media(max-width:900px){
-  .sidebar{display:none}
-  .right-panel{display:none}
-  .canvas{width:100%}
-}
-@media(max-width:640px){
-  .topnav{padding:0 16px}
-  .canvas-bar{padding:0 16px}
-  .storyboard{padding:16px}
-  .scenes-row{flex-direction:column;align-items:center}
-  .scene-card,.add-scene-card{width:100%;max-width:340px}
-}
+@keyframes popIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:900px){.lp,.rp{display:none}.mb-wrap{width:100%}}
+@media(max-width:640px){.moodboard{padding:14px;grid-template-columns:repeat(2,1fr);gap:10px}
+  .s-scene{grid-template-columns:1fr}.align-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-
-<div class="bg"><div class="bg-mesh"></div><div class="bg-lines"></div></div>
-
-<!-- TOPNAV -->
+<div class="bg"></div>
 <nav class="topnav">
-  <div class="nav-brand">
-    <div class="nav-brand-gem"></div>
-    <div class="nav-brand-name">Glam<span>paign</span></div>
-    <div class="nav-brand-sub">by Velocity Agentic</div>
-  </div>
-  <div class="nav-actions">
-    <button class="nav-btn" onclick="openExportModal()">
-      Export
-    </button>
-    <button class="nav-btn primary" onclick="openNewCampaignModal()">
-      + New Campaign
-    </button>
+  <div class="nav-diamond"></div>
+  <div class="nav-name">Glam<em>paign</em></div>
+  <div class="nav-sub">by Velocity Agentic</div>
+  <div class="nav-right">
+    <button class="npill" onclick="clearAll()">New Campaign</button>
+    <button class="npill gold" onclick="buildPitchDeck()">✦ Build Pitch Deck</button>
   </div>
 </nav>
 
-<!-- APP -->
-<div class="app">
-
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="sidebar-section" style="padding-bottom:12px">
-      <div class="sidebar-label">Campaigns</div>
+<div class="studio">
+  <!-- LEFT -->
+  <aside class="lp">
+    <div class="lp-head"><h2>Campaign <em>Brief</em></h2><p>Define your vision. Glampaign builds your luxury brand deal pitch around it.</p></div>
+    <div class="lp-body">
+      <div class="f"><label>Campaign Title</label><input id="cpTitle" placeholder="e.g. Amara × Bottega Veneta"/></div>
+      <div class="f"><label>Your Name / Brand</label><input id="cpCreator" placeholder="e.g. Amara by Velocity Agentic"/></div>
+      <div class="f"><label>Target Brand Partner</label><input id="cpBrand" placeholder="e.g. Bottega Veneta"/></div>
+      <div class="f"><label>Campaign Narrative</label><textarea id="cpNarrative" placeholder="e.g. Amara walks through Rockefeller Center at golden hour, carrying a Bottega bag, embodying modern luxury and effortless authority..."></textarea></div>
+      <div class="f"><label>Campaign Goal</label>
+        <select id="cpGoal">
+          <option value="brand_deal">Brand Deal / Paid Partnership</option>
+          <option value="gifting">Gifting Campaign</option>
+          <option value="ambassador">Brand Ambassador</option>
+          <option value="collab">Collaborative Collection</option>
+          <option value="event">Event Appearance</option>
+        </select></div>
+      <div class="f"><label>Your Contact</label><input id="cpContact" placeholder="email or @handle"/></div>
+      <div class="f"><label>Quick Brand Select</label><div class="brand-tags" id="brandTags"></div></div>
     </div>
-    <div class="campaign-list" id="campaignList"></div>
-    <button class="new-campaign-btn" onclick="openNewCampaignModal()">
-      <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-      New Campaign
-    </button>
+    <div class="lp-foot"><button class="build-btn" onclick="buildPitchDeck()"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Build Pitch Deck</button></div>
   </aside>
 
-  <!-- CANVAS -->
-  <main class="canvas">
-    <div class="canvas-bar">
-      <div class="canvas-title-wrap">
-        <input class="canvas-campaign-name" id="campaignNameInput" 
-          placeholder="Untitled Campaign" 
-          onchange="renameCampaign(this.value)"
-          oninput="renameCampaign(this.value)"/>
-        <div class="canvas-meta" id="canvasMeta">No campaign selected</div>
+  <!-- CENTER -->
+  <div class="mb-wrap">
+    <div class="mb-bar">
+      <div class="mb-title" id="mbTitle">Your Moodboard</div>
+      <div class="mb-ct" id="mbCt">0 images</div>
+      <div class="mb-acts">
+        <button class="mbbtn" onclick="document.getElementById('gUpload').click()"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>Add Images</button>
+        <button class="mbbtn gold" onclick="generateAllSuggestions()"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Suggest All</button>
       </div>
-      <div class="canvas-bar-actions">
-        <button class="cb-btn" onclick="generateFullCampaign()">
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          AI Generate All
-        </button>
-        <button class="cb-btn rose" onclick="addScene()">
-          + Add Scene
-        </button>
+      <input type="file" id="gUpload" accept="image/*" multiple style="display:none" onchange="handleUpload(this)"/>
+    </div>
+    <div class="moodboard" id="moodboard">
+      <div class="upload-zone" id="uz">
+        <input type="file" accept="image/*" multiple onchange="handleUpload(this)"/>
+        <div class="uz-ic"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>
+        <div class="uz-t">Drop your campaign images here</div>
+        <div class="uz-s">Amara · Brand product · Location · Wardrobe · Lifestyle</div>
       </div>
     </div>
+  </div>
 
-    <div class="storyboard" id="storyboard">
-      <div class="empty-state" id="emptyState">
-        <div class="empty-gem"></div>
-        <h2>Your <em>Campaign</em> Canvas</h2>
-        <p>Start a new campaign or select one from the sidebar. Each scene becomes a building block of your viral Instagram strategy — storyboarded, scripted, and prompt-ready.</p>
-        <button class="btn-modal-primary" onclick="openNewCampaignModal()">Create Your First Campaign</button>
-      </div>
-      <div class="scenes-row" id="scenesRow" style="display:none"></div>
-    </div>
-
-    <div class="campaign-summary" id="campaignSummary" style="display:none">
-      <div class="cs-stat">
-        <div class="cs-stat-num" id="totalScenes">0</div>
-        <div class="cs-stat-label">Scenes</div>
-      </div>
-      <div class="cs-divider"></div>
-      <div class="cs-stat">
-        <div class="cs-stat-num" id="totalDuration">0s</div>
-        <div class="cs-stat-label">Est. Duration</div>
-      </div>
-      <div class="cs-divider"></div>
-      <div class="cs-stat">
-        <div class="cs-stat-num" id="totalPrompts">0</div>
-        <div class="cs-stat-label">Prompts Ready</div>
-      </div>
-      <div class="cs-divider"></div>
-      <div class="cs-stat" style="margin-left:auto">
-        <button class="cb-btn rose" onclick="openExportModal()" style="font-size:.65rem">
-          <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-          Export Package
-        </button>
-      </div>
-    </div>
-  </main>
-
-  <!-- RIGHT PANEL -->
-  <aside class="right-panel" id="rightPanel">
-    <div class="rp-tabs">
-      <div class="rp-tab active" onclick="switchRPTab('scene',this)">Scene</div>
-      <div class="rp-tab" onclick="switchRPTab('caption',this)">Caption</div>
-      <div class="rp-tab" onclick="switchRPTab('export',this)">Export</div>
-    </div>
-    <div class="rp-content" id="rpContent">
-      <div style="text-align:center;padding:40px 0;color:var(--muted)">
-        <div style="font-size:1.5rem;margin-bottom:10px">✦</div>
-        <div style="font-size:.75rem;letter-spacing:.1em">Select a scene to edit</div>
-      </div>
+  <!-- RIGHT -->
+  <aside class="rp">
+    <div class="rp-head"><h3>Scene <em>Studio</em></h3><p>Click any image to build its scene</p></div>
+    <div class="rp-body" id="rpBody">
+      <div class="sel-prev"><div class="sel-prev-empty"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><p>Select an image</p></div></div>
     </div>
   </aside>
-
 </div>
 
-<!-- NEW CAMPAIGN MODAL -->
-<div class="modal-overlay" id="newCampaignModal" onclick="if(event.target===this)closeModal('newCampaignModal')">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('newCampaignModal')">&times;</button>
-    <h2>New <em>Campaign</em></h2>
-    <p>Give your campaign a name and choose your content goal. Glampaign will scaffold the scenes and generate AI prompts for each one.</p>
-    <div class="field-group">
-      <label class="field-label">Campaign Name</label>
-      <input class="field-input" id="newCampaignName" placeholder="e.g. Sheila Johnson Launch Series"/>
-    </div>
-    <div class="field-group">
-      <label class="field-label">Campaign Goal</label>
-      <select class="field-select" id="newCampaignGoal">
-        <option value="brand_awareness">Brand Awareness</option>
-        <option value="lead_generation">Lead Generation</option>
-        <option value="product_launch">Product / Service Launch</option>
-        <option value="thought_leadership">Thought Leadership</option>
-        <option value="community_growth">Community Growth</option>
-        <option value="sales_conversion">Sales & Conversion</option>
-        <option value="viral_growth">Viral Growth</option>
-      </select>
-    </div>
-    <div class="field-group">
-      <label class="field-label">Industry / Niche</label>
-      <input class="field-input" id="newCampaignIndustry" placeholder="e.g. Luxury Brand Development"/>
-    </div>
-    <div class="field-group">
-      <label class="field-label">Number of Scenes</label>
-      <select class="field-select" id="newCampaignScenes">
-        <option value="3">3 scenes (Short Series)</option>
-        <option value="5" selected>5 scenes (Standard Campaign)</option>
-        <option value="7">7 scenes (Full Campaign)</option>
-        <option value="10">10 scenes (Maxi Campaign)</option>
-      </select>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-modal-ghost" onclick="closeModal('newCampaignModal')">Cancel</button>
-      <button class="btn-modal-primary" onclick="createCampaign()">Build Campaign →</button>
-    </div>
+<!-- DECK -->
+<div class="deck-ov" id="deckOv">
+  <div class="deck-bar">
+    <h3 id="deckTitle">Pitch Deck</h3>
+    <button class="deck-expbtn" onclick="exportDeck()">Export ↓</button>
+    <button class="deck-xbtn" onclick="document.getElementById('deckOv').classList.remove('open')">Close ✕</button>
   </div>
+  <div class="deck-slides" id="deckSlides"></div>
 </div>
 
-<!-- ADD SCENE MODAL -->
-<div class="modal-overlay" id="addSceneModal" onclick="if(event.target===this)closeModal('addSceneModal')">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('addSceneModal')">&times;</button>
-    <h2>Add <em>Scene</em></h2>
-    <p>Define this scene's role in your campaign. Glampaign will generate the shot direction, avatar prompt, and caption for it.</p>
-    <div class="field-group">
-      <label class="field-label">Scene Title</label>
-      <input class="field-input" id="newSceneTitle" placeholder="e.g. The Hook — Pattern Interrupt"/>
-    </div>
-    <div class="field-group">
-      <label class="field-label">Scene Type</label>
-      <div class="type-pills" id="sceneTypePills"></div>
-    </div>
-    <div class="field-group">
-      <label class="field-label">Scene Brief (optional)</label>
-      <textarea class="field-textarea" id="newSceneBrief" placeholder="What happens in this scene? What do you want to convey?"></textarea>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-modal-ghost" onclick="closeModal('addSceneModal')">Cancel</button>
-      <button class="btn-modal-primary" onclick="confirmAddScene()">Add Scene →</button>
-    </div>
-  </div>
-</div>
-
-<!-- EXPORT MODAL -->
-<div class="modal-overlay" id="exportModal" onclick="if(event.target===this)closeModal('exportModal')">
-  <div class="modal" style="max-width:480px">
-    <button class="modal-close" onclick="closeModal('exportModal')">&times;</button>
-    <h2>Export <em>Package</em></h2>
-    <p>Your complete campaign package — ready to hand to a videographer, VA, or plug directly into any AI video tool.</p>
-    <div class="export-option" onclick="exportCampaignBrief()">
-      <div class="export-icon" style="background:rgba(232,180,184,.1)">📄</div>
-      <div class="export-info">
-        <h4>Full Campaign Brief</h4>
-        <p>All scenes, prompts, shot directions, music suggestions — complete director's package as a text file</p>
-      </div>
-    </div>
-    <div class="export-option" onclick="exportCaptions()">
-      <div class="export-icon" style="background:rgba(201,168,76,.1)">✍️</div>
-      <div class="export-info">
-        <h4>Captions & Hashtags</h4>
-        <p>All post captions and hashtag clusters ready to copy-paste into Instagram</p>
-      </div>
-    </div>
-    <div class="export-option" onclick="exportPrompts()">
-      <div class="export-icon" style="background:rgba(179,157,219,.1)">🤖</div>
-      <div class="export-info">
-        <h4>Avatar Prompts Only</h4>
-        <p>All Amara avatar prompts extracted and ready for your AI video generation tool</p>
-      </div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-modal-ghost" onclick="closeModal('exportModal')">Close</button>
-    </div>
-  </div>
+<!-- LOADING -->
+<div class="load-ov" id="loadOv">
+  <div class="load-ring"></div>
+  <div class="load-txt">Building your pitch deck</div>
+  <div class="load-sub" id="loadSub">Writing your campaign...</div>
 </div>
 
 <script>
-// ── DATA ──
-var state = {
-  campaigns: JSON.parse(localStorage.getItem('glampaign_campaigns') || '[]'),
-  activeCampaignId: null,
-  activeSceneIdx: null,
-  activeRPTab: 'scene'
-};
+var images = JSON.parse(localStorage.getItem('gp_meta')||'[]');
+var store = {}; // base64 session only — never stored
+var selIdx = null;
+var BRANDS = ['Bottega Veneta','Louis Vuitton','Hermès','Chanel','Dior','Balenciaga','Saint Laurent','Gucci','Prada','Valentino','Fendi','Celine'];
 
-var SCENE_TYPES = [
-  {id:'hook', label:'🎣 Hook', color:'rgba(232,180,184,.15)', textColor:'#e8b4b8'},
-  {id:'story', label:'📖 Story', color:'rgba(201,168,76,.15)', textColor:'#c9a84c'},
-  {id:'value', label:'💎 Value Drop', color:'rgba(143,181,160,.15)', textColor:'#8fb5a0'},
-  {id:'social_proof', label:'⭐ Social Proof', color:'rgba(179,157,219,.15)', textColor:'#b39ddb'},
-  {id:'cta', label:'🔥 CTA', color:'rgba(255,107,107,.15)', textColor:'#ff6b6b'},
-  {id:'reveal', label:'✨ Reveal', color:'rgba(232,180,184,.15)', textColor:'#e8b4b8'},
-  {id:'tutorial', label:'🎓 Tutorial', color:'rgba(201,168,76,.12)', textColor:'#c9a84c'},
-  {id:'bts', label:'🎬 Behind Scenes', color:'rgba(107,122,141,.15)', textColor:'#9ba8b7'},
-];
+function saveMeta(){ localStorage.setItem('gp_meta', JSON.stringify(images)); }
 
-var selectedSceneType = 'hook';
-
-function saveState(){
-  localStorage.setItem('glampaign_campaigns', JSON.stringify(state.campaigns));
+function buildBrandTags(){
+  var el = document.getElementById('brandTags');
+  BRANDS.forEach(function(b){
+    var t = document.createElement('div'); t.className='btag'; t.textContent=b;
+    t.onclick=function(){
+      document.querySelectorAll('.btag').forEach(function(x){x.classList.remove('on')});
+      t.classList.add('on'); document.getElementById('cpBrand').value=b;
+    }; el.appendChild(t);
+  });
 }
 
-function getActiveCampaign(){
-  return state.campaigns.find(function(c){ return c.id === state.activeCampaignId; });
+function handleUpload(input){
+  if(!input.files) return;
+  Array.from(input.files).forEach(function(f){
+    if(!f.type.startsWith('image/')) return;
+    var r = new FileReader();
+    r.onload=function(e){
+      var id=Date.now()+Math.random().toString(36).slice(2);
+      images.push({id:id,name:f.name,label:f.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' '),suggestion:'',prompt:'',caption:'',done:false});
+      store[id]=e.target.result; saveMeta(); renderBoard();
+    }; r.readAsDataURL(f);
+  }); input.value=''; document.getElementById('uz').style.display='none';
 }
 
-// ── CAMPAIGN LIST ──
-function renderCampaignList(){
-  var list = document.getElementById('campaignList');
-  if(!state.campaigns.length){
-    list.innerHTML = '<div style="padding:16px 14px;font-size:.72rem;color:var(--muted);letter-spacing:.06em;text-align:center">No campaigns yet</div>';
+function renderBoard(){
+  var board=document.getElementById('moodboard');
+  board.querySelectorAll('.img-tile').forEach(function(t){t.remove()});
+  document.getElementById('mbCt').textContent=images.length+' image'+(images.length!==1?'s':'');
+  document.getElementById('mbTitle').textContent=document.getElementById('cpTitle').value||'Your Moodboard';
+  if(!images.length){document.getElementById('uz').style.display='';return;}
+  document.getElementById('uz').style.display='none';
+  images.forEach(function(img,i){
+    var src=store[img.id]||'';
+    var tile=document.createElement('div');
+    tile.className='img-tile'+(i===selIdx?' sel':'');
+    tile.onclick=function(){selIdx=i;renderBoard();renderEditor();};
+    tile.innerHTML='<div class="tile-img">'+(src?'<img src="'+src+'" alt=""/>':'')+'<div class="tile-ov"></div>'+
+      '<div class="tile-num">Scene '+(i+1)+'</div>'+
+      '<div class="tile-st '+(img.done?'d':'p')+'">'+(img.done?'✓':'·')+'</div>'+
+      '<button class="tile-rm" onclick="event.stopPropagation();rmImg('+i+')">✕</button></div>'+
+      '<div class="tile-body"><div class="tile-lbl">'+img.label+'</div>'+
+      '<div class="tile-prev '+(img.suggestion?'gen':'')+'">'+
+      (img.suggestion?img.suggestion.slice(0,75)+'...':'Click to generate suggestion')+
+      '</div></div>';
+    board.appendChild(tile);
+  });
+}
+
+function rmImg(i){ delete store[images[i].id]; images.splice(i,1); if(selIdx>=images.length)selIdx=images.length-1; if(selIdx<0)selIdx=null; saveMeta();renderBoard();renderEditor(); }
+
+function renderEditor(){
+  var ep=document.getElementById('rpBody');
+  if(selIdx===null||!images[selIdx]){
+    ep.innerHTML='<div class="sel-prev"><div class="sel-prev-empty"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><p>Select an image</p></div></div>';
     return;
   }
-  list.innerHTML = state.campaigns.map(function(c){
-    var active = c.id === state.activeCampaignId ? 'active' : '';
-    return '<div class="campaign-item '+active+'" onclick="selectCampaign(\''+c.id+'\')">'+
-      '<div class="ci-name">'+c.name+'</div>'+
-      '<div class="ci-meta">'+c.goal.replace(/_/g,' ')+'</div>'+
-      '<div class="ci-scenes">'+c.scenes.length+' scenes</div>'+
-    '</div>';
-  }).join('');
+  var img=images[selIdx]; var src=store[img.id]||''; var i=selIdx;
+  ep.innerHTML=
+    '<div class="sel-prev">'+(src?'<img src="'+src+'"/>':'<div class="sel-prev-empty"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>')+'</div>'+
+    '<div class="f" style="margin-bottom:10px"><label class="fld-lbl">Scene Label</label>'+
+    '<input class="fld-ta" style="min-height:auto;height:auto;padding:7px 9px;resize:none" value="'+img.label+'" onchange="images['+i+'].label=this.value;saveMeta();renderBoard()"/></div>'+
+    '<button class="gen-btn" id="sugBtn" onclick="genSuggestion('+i+')"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Get Ava\'s Scene Suggestion</button>'+
+    '<div class="sug-box '+(img.suggestion?'show':'')+'" id="sugBox"><div class="sug-lbl">Ava\'s Suggestion</div><div class="sug-txt">'+img.suggestion+'</div></div>'+
+    '<div class="div-line"></div>'+
+    '<label class="fld-lbl">Your Scene Prompt (or paste from Ava\'vaci)</label>'+
+    '<textarea class="fld-ta" placeholder="Paste your Ava\'vaci prompt here, or write your own scene direction..." onchange="images['+i+'].prompt=this.value;images['+i+'].done=!!this.value;saveMeta();renderBoard()">'+img.prompt+'</textarea>'+
+    '<button class="gen-btn" onclick="genCaption('+i+')"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Generate Instagram Caption</button>'+
+    '<label class="fld-lbl">Caption</label>'+
+    '<div class="out-box '+(img.caption?'show':'')+'" id="capBox">'+img.caption+'</div>'+
+    (img.caption?'<button class="copy-btn" onclick="navigator.clipboard.writeText(images['+i+'].caption);this.textContent=\'Copied!\'">Copy Caption</button>':'');
 }
 
-// ── SELECT CAMPAIGN ──
-function selectCampaign(id){
-  state.activeCampaignId = id;
-  state.activeSceneIdx = null;
-  renderCampaignList();
-  renderCanvas();
-  renderRightPanel();
-}
-
-// ── RENDER CANVAS ──
-function renderCanvas(){
-  var campaign = getActiveCampaign();
-  var emptyState = document.getElementById('emptyState');
-  var scenesRow = document.getElementById('scenesRow');
-  var summary = document.getElementById('campaignSummary');
-  var nameInput = document.getElementById('campaignNameInput');
-  var meta = document.getElementById('canvasMeta');
-
-  if(!campaign){
-    emptyState.style.display = '';
-    scenesRow.style.display = 'none';
-    summary.style.display = 'none';
-    nameInput.value = '';
-    meta.textContent = 'No campaign selected';
-    return;
-  }
-
-  emptyState.style.display = 'none';
-  scenesRow.style.display = 'flex';
-  summary.style.display = 'flex';
-  nameInput.value = campaign.name;
-  meta.textContent = campaign.goal.replace(/_/g,' ').replace(/\b\w/g,function(l){return l.toUpperCase()}) + ' · ' + campaign.industry;
-
-  // Build scene cards
-  scenesRow.innerHTML = '';
-  campaign.scenes.forEach(function(scene, idx){
-    var typeData = SCENE_TYPES.find(function(t){ return t.id===scene.type; }) || SCENE_TYPES[0];
-    var active = idx === state.activeSceneIdx ? 'active-scene' : '';
-    var card = document.createElement('div');
-    card.className = 'scene-card '+active;
-    card.onclick = function(){ selectScene(idx); };
-    card.innerHTML =
-      '<div class="scene-thumb">'+
-        '<div class="scene-thumb-bg">'+typeData.label.split(' ')[0]+'</div>'+
-        '<div class="scene-num">Scene '+(idx+1)+'</div>'+
-        '<div class="scene-type-badge" style="background:'+typeData.color+';color:'+typeData.textColor+'">'+typeData.label.split(' ').slice(1).join(' ')+'</div>'+
-      '</div>'+
-      '<div class="scene-card-body">'+
-        '<div class="scene-title">'+scene.title+'</div>'+
-        '<div class="scene-duration">'+scene.duration+'s · '+typeData.label.split(' ').slice(1).join(' ')+'</div>'+
-        (scene.prompt ? '<div class="scene-preview">'+scene.prompt.slice(0,80)+'...</div>' : '<div class="scene-preview" style="color:var(--muted);font-style:italic">No prompt yet — click to generate</div>')+
-        '<div class="scene-actions">'+
-          '<button class="scene-act-btn" onclick="event.stopPropagation();generateScenePrompt('+idx+')">'+
-            '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>'+
-            'Generate'+
-          '</button>'+
-          '<button class="scene-act-btn" onclick="event.stopPropagation();moveScene('+idx+',-1)" '+(idx===0?'disabled':'')+'>↑</button>'+
-          '<button class="scene-act-btn" onclick="event.stopPropagation();moveScene('+idx+',1)" '+(idx===campaign.scenes.length-1?'disabled':'')+'>↓</button>'+
-          '<button class="scene-act-btn danger" onclick="event.stopPropagation();deleteScene('+idx+')">'+
-            '<svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>'+
-          '</button>'+
-        '</div>'+
-      '</div>';
-    scenesRow.appendChild(card);
-  });
-
-  // Add scene button
-  var addCard = document.createElement('div');
-  addCard.className = 'add-scene-card';
-  addCard.onclick = addScene;
-  addCard.innerHTML = '<svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg><span>Add Scene</span>';
-  scenesRow.appendChild(addCard);
-
-  // Summary
-  var totalDur = campaign.scenes.reduce(function(a,s){ return a+(parseInt(s.duration)||5); }, 0);
-  var totalPrompts = campaign.scenes.filter(function(s){ return s.prompt; }).length;
-  document.getElementById('totalScenes').textContent = campaign.scenes.length;
-  document.getElementById('totalDuration').textContent = totalDur+'s';
-  document.getElementById('totalPrompts').textContent = totalPrompts+'/'+campaign.scenes.length;
-}
-
-// ── SELECT SCENE ──
-function selectScene(idx){
-  state.activeSceneIdx = idx;
-  renderCanvas();
-  renderRightPanel();
-  switchRPTab('scene', document.querySelector('.rp-tab'));
-}
-
-// ── RIGHT PANEL ──
-function switchRPTab(tab, el){
-  state.activeRPTab = tab;
-  document.querySelectorAll('.rp-tab').forEach(function(t){ t.classList.remove('active'); });
-  if(el) el.classList.add('active');
-  else document.querySelectorAll('.rp-tab')[tab==='scene'?0:tab==='caption'?1:2].classList.add('active');
-  renderRightPanel();
-}
-
-function renderRightPanel(){
-  var content = document.getElementById('rpContent');
-  var campaign = getActiveCampaign();
-  if(!campaign || state.activeSceneIdx === null){
-    if(state.activeRPTab === 'export'){
-      renderExportPanel(content);
-    } else if(state.activeRPTab === 'caption' && campaign){
-      renderCaptionPanel(content, campaign);
-    } else {
-      content.innerHTML = '<div style="text-align:center;padding:40px 0;color:var(--muted)"><div style="font-size:1.5rem;margin-bottom:10px">✦</div><div style="font-size:.75rem;letter-spacing:.1em">Select a scene to edit</div></div>';
-    }
-    return;
-  }
-  var scene = campaign.scenes[state.activeSceneIdx];
-  if(state.activeRPTab === 'scene') renderSceneEditor(content, scene, state.activeSceneIdx);
-  else if(state.activeRPTab === 'caption') renderCaptionPanel(content, campaign);
-  else renderExportPanel(content);
-}
-
-function renderSceneEditor(content, scene, idx){
-  var typeData = SCENE_TYPES.find(function(t){ return t.id===scene.type; }) || SCENE_TYPES[0];
-  content.innerHTML =
-    '<div style="margin-bottom:16px">'+
-      '<div style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Scene '+(idx+1)+'</div>'+
-      '<div style="font-family:\'Bodoni Moda\',serif;font-size:1.1rem;color:var(--ivory)">'+scene.title+'</div>'+
-    '</div>'+
-    '<div class="field-group">'+
-      '<label class="field-label">Scene Title</label>'+
-      '<input class="field-input" value="'+scene.title+'" onchange="updateScene('+idx+',\'title\',this.value)"/>'+
-    '</div>'+
-    '<div class="field-group">'+
-      '<label class="field-label">Duration (seconds)</label>'+
-      '<input class="field-input" type="number" value="'+scene.duration+'" min="3" max="60" onchange="updateScene('+idx+',\'duration\',this.value)"/>'+
-    '</div>'+
-    '<div class="field-group">'+
-      '<label class="field-label">Scene Brief</label>'+
-      '<textarea class="field-textarea" onchange="updateScene('+idx+',\'brief\',this.value)">'+scene.brief+'</textarea>'+
-    '</div>'+
-    '<button class="ai-gen-btn" id="genBtn'+idx+'" onclick="generateScenePrompt('+idx+')">'+
-      '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>'+
-      'Generate Amara Prompt'+
-    '</button>'+
-    '<div class="gen-box '+(scene.prompt?'show':'')+'" id="genBox'+idx+'">'+scene.prompt+'</div>'+
-    (scene.prompt ? '<button class="btn-modal-ghost" style="width:100%;margin-top:8px;font-size:.62rem;padding:8px" onclick="copyScenePrompt('+idx+')">Copy Prompt</button>' : '');
-}
-
-function renderCaptionPanel(content, campaign){
-  if(!campaign.caption){
-    content.innerHTML =
-      '<div style="margin-bottom:16px">'+
-        '<div style="font-family:\'Bodoni Moda\',serif;font-size:1.1rem;color:var(--ivory);margin-bottom:6px">Captions & Hashtags</div>'+
-        '<div style="font-size:.75rem;color:var(--muted);line-height:1.6">Generate captions for each scene plus your full hashtag strategy.</div>'+
-      '</div>'+
-      '<button class="ai-gen-btn" onclick="generateCaptions()">'+
-        '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>'+
-        'Generate All Captions'+
-      '</button>';
-    return;
-  }
-  var html = '<div style="margin-bottom:16px"><div style="font-family:\'Bodoni Moda\',serif;font-size:1.1rem;color:var(--ivory);margin-bottom:6px">Captions & Hashtags</div></div>';
-  html += '<div class="caption-section"><h4>Campaign Caption</h4><div class="caption-box">'+campaign.caption+'</div></div>';
-  if(campaign.hashtags && campaign.hashtags.length){
-    html += '<div class="caption-section"><h4>Hashtag Strategy</h4><div class="hashtag-cloud">'+campaign.hashtags.map(function(h){ return '<span class="hashtag">'+h+'</span>'; }).join('')+'</div></div>';
-  }
-  html += '<button class="btn-modal-ghost" style="width:100%;margin-top:8px;font-size:.62rem;padding:8px" onclick="copyCaptions()">Copy All Captions</button>';
-  html += '<button class="ai-gen-btn" style="margin-top:8px" onclick="generateCaptions()"><svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:var(--rose)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Regenerate</button>';
-  content.innerHTML = html;
-}
-
-function renderExportPanel(content){
-  content.innerHTML =
-    '<div style="margin-bottom:16px"><div style="font-family:\'Bodoni Moda\',serif;font-size:1.1rem;color:var(--ivory);margin-bottom:6px">Export Package</div><div style="font-size:.75rem;color:var(--muted);line-height:1.6">Download your complete campaign as a director\'s brief.</div></div>'+
-    '<div class="export-option" onclick="exportCampaignBrief()"><div class="export-icon" style="background:rgba(232,180,184,.1)">📄</div><div class="export-info"><h4>Full Campaign Brief</h4><p>All scenes, prompts, music, shot directions</p></div></div>'+
-    '<div class="export-option" onclick="exportCaptions()"><div class="export-icon" style="background:rgba(201,168,76,.1)">✍️</div><div class="export-info"><h4>Captions & Hashtags</h4><p>Ready to paste into Instagram</p></div></div>'+
-    '<div class="export-option" onclick="exportPrompts()"><div class="export-icon" style="background:rgba(179,157,219,.1)">🤖</div><div class="export-info"><h4>Avatar Prompts Only</h4><p>For AI video generation tools</p></div></div>';
-}
-
-// ── CREATE CAMPAIGN ──
-function createCampaign(){
-  var name = document.getElementById('newCampaignName').value.trim() || 'Untitled Campaign';
-  var goal = document.getElementById('newCampaignGoal').value;
-  var industry = document.getElementById('newCampaignIndustry').value.trim() || 'Brand Development';
-  var numScenes = parseInt(document.getElementById('newCampaignScenes').value);
-
-  var defaultSceneTypes = ['hook','value','social_proof','story','cta','reveal','tutorial','bts','hook','value'];
-  var defaultTitles = [
-    'The Hook — Stop The Scroll',
-    'The Value Drop',
-    'Social Proof Moment',
-    'The Story',
-    'The Call To Action',
-    'The Reveal',
-    'The Tutorial',
-    'Behind The Scenes',
-    'Scene 9',
-    'Scene 10'
-  ];
-
-  var scenes = [];
-  for(var i=0;i<numScenes;i++){
-    scenes.push({
-      title: defaultTitles[i] || 'Scene '+(i+1),
-      type: defaultSceneTypes[i] || 'value',
-      brief:'',
-      duration: i===0 ? 3 : i===numScenes-1 ? 5 : 8,
-      prompt:'',
-      caption:''
-    });
-  }
-
-  var campaign = {
-    id: Date.now().toString(),
-    name: name,
-    goal: goal,
-    industry: industry,
-    scenes: scenes,
-    caption:'',
-    hashtags:[],
-    created: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})
-  };
-
-  state.campaigns.unshift(campaign);
-  saveState();
-  closeModal('newCampaignModal');
-  selectCampaign(campaign.id);
-  // Auto-generate prompts for all scenes
-  setTimeout(function(){ generateFullCampaign(); }, 400);
-}
-
-// ── SCENE OPERATIONS ──
-function addScene(){
-  // Build type pills
-  var pills = document.getElementById('sceneTypePills');
-  pills.innerHTML = SCENE_TYPES.map(function(t){
-    return '<div class="type-pill '+(t.id===selectedSceneType?'selected':'')+'" onclick="selectType(\''+t.id+'\',this)">'+t.label+'</div>';
-  }).join('');
-  document.getElementById('newSceneTitle').value = '';
-  document.getElementById('newSceneBrief').value = '';
-  openModal('addSceneModal');
-}
-
-function selectType(id, el){
-  selectedSceneType = id;
-  document.querySelectorAll('.type-pill').forEach(function(p){ p.classList.remove('selected'); });
-  el.classList.add('selected');
-}
-
-function confirmAddScene(){
-  var campaign = getActiveCampaign();
-  if(!campaign) return;
-  var title = document.getElementById('newSceneTitle').value.trim() || 'New Scene';
-  var brief = document.getElementById('newSceneBrief').value.trim();
-  campaign.scenes.push({
-    title:title, type:selectedSceneType,
-    brief:brief, duration:8, prompt:'', caption:''
-  });
-  saveState();
-  closeModal('addSceneModal');
-  renderCanvas();
-  state.activeSceneIdx = campaign.scenes.length-1;
-  renderCanvas();
-  generateScenePrompt(campaign.scenes.length-1);
-}
-
-function updateScene(idx, field, value){
-  var campaign = getActiveCampaign();
-  if(!campaign) return;
-  campaign.scenes[idx][field] = value;
-  saveState();
-  renderCanvas();
-}
-
-function moveScene(idx, dir){
-  var campaign = getActiveCampaign();
-  if(!campaign) return;
-  var newIdx = idx+dir;
-  if(newIdx<0||newIdx>=campaign.scenes.length) return;
-  var tmp = campaign.scenes[idx];
-  campaign.scenes[idx] = campaign.scenes[newIdx];
-  campaign.scenes[newIdx] = tmp;
-  state.activeSceneIdx = newIdx;
-  saveState();
-  renderCanvas();
-}
-
-function deleteScene(idx){
-  var campaign = getActiveCampaign();
-  if(!campaign) return;
-  campaign.scenes.splice(idx,1);
-  if(state.activeSceneIdx >= campaign.scenes.length) state.activeSceneIdx = campaign.scenes.length-1;
-  saveState();
-  renderCanvas();
-  renderRightPanel();
-}
-
-function renameCampaign(name){
-  var campaign = getActiveCampaign();
-  if(!campaign) return;
-  campaign.name = name;
-  saveState();
-  renderCampaignList();
-}
-
-// ── AI GENERATION ──
-function generateScenePrompt(idx){
-  var campaign = getActiveCampaign();
-  if(!campaign) return;
-  var scene = campaign.scenes[idx];
-  var btn = document.getElementById('genBtn'+idx);
-  if(btn){ btn.disabled=true; btn.innerHTML='<span class="spin">◌</span> Generating...'; }
-
-  callClaude(
-    'You are Glampaign, a luxury Instagram campaign AI for Velocity Agentic.\n\nGenerate a complete SCENE PROMPT for the following:\n\nCampaign: '+campaign.name+'\nGoal: '+campaign.goal.replace(/_/g,' ')+'\nIndustry: '+campaign.industry+'\nScene '+(idx+1)+' of '+campaign.scenes.length+': '+scene.title+'\nScene Type: '+scene.type+'\nScene Brief: '+(scene.brief||'Not specified')+'\nEstimated Duration: '+scene.duration+' seconds\n\nGenerate a detailed director\'s prompt for Amara (luxury, polished, confident brand avatar). Include:\n- Exact opening words/action (first 2 seconds)\n- Shot type and camera angle\n- Setting and background\n- Wardrobe direction\n- Lighting mood\n- Pacing and energy\n- Music mood and BPM\n- One specific song suggestion\n- On-screen text if any\n- How this scene connects to the campaign goal\n\nWrite this as a professional video director\'s brief. Be specific and visual. 150-200 words.',
-    function(text){
-      campaign.scenes[idx].prompt = text;
-      saveState();
-      var box = document.getElementById('genBox'+idx);
-      if(box){ box.textContent = text; box.classList.add('show'); }
-      if(btn){ btn.disabled=false; btn.innerHTML='<svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:var(--rose)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Regenerate Prompt'; }
-      renderCanvas();
-      renderRightPanel();
-    }
-  );
-}
-
-function generateFullCampaign(){
-  var campaign = getActiveCampaign();
-  if(!campaign) return;
-  campaign.scenes.forEach(function(_,idx){
-    setTimeout(function(){ generateScenePrompt(idx); }, idx * 800);
-  });
-  setTimeout(function(){ generateCaptions(); }, campaign.scenes.length * 800 + 500);
-}
-
-function generateCaptions(){
-  var campaign = getActiveCampaign();
-  if(!campaign) return;
-  callClaude(
-    'You are Glampaign, a luxury Instagram campaign AI.\n\nGenerate Instagram captions and hashtag strategy for this campaign:\n\nCampaign: '+campaign.name+'\nGoal: '+campaign.goal.replace(/_/g,' ')+'\nIndustry: '+campaign.industry+'\nScenes: '+campaign.scenes.map(function(s,i){ return (i+1)+'. '+s.title; }).join(', ')+'\n\nGenerate:\n1. A master campaign caption (2-3 sentences, brand voice: luxury, direct, authoritative)\n2. 20 strategic hashtags mixing: 3 mega (1M+), 7 large (100K-1M), 7 medium (10K-100K), 3 niche (under 10K)\n\nRespond ONLY in JSON:\n{"caption":"caption text here","hashtags":["#tag1","#tag2",...]}',
-    function(text){
-      try{
-        var clean = text.replace(/```json|```/g,'').trim();
-        var parsed = JSON.parse(clean);
-        campaign.caption = parsed.caption || '';
-        campaign.hashtags = parsed.hashtags || [];
-      } catch(e){
-        campaign.caption = text.slice(0,200);
-        campaign.hashtags = ['#luxurybrand','#brandstrategy','#contentcreator','#instagrammarketing','#velocityagentic'];
-      }
-      saveState();
-      if(state.activeRPTab === 'caption') renderRightPanel();
-    }
-  );
-}
-
-function callClaude(prompt, callback){
-  fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      model:'claude-sonnet-4-20250514',
-      max_tokens:1000,
-      messages:[{role:'user',content:prompt}]
-    })
-  })
-  .then(function(r){ return r.json(); })
-  .then(function(data){
-    var text = (data.content||[]).map(function(c){ return c.text||''; }).join('');
-    callback(text);
-  })
-  .catch(function(){
-    callback('Unable to generate at this time. Please try again.');
+function genSuggestion(i){
+  var img=images[i]; var src=store[img.id];
+  if(!src){alert('Please re-upload this image.');return;}
+  var btn=document.getElementById('sugBtn');
+  if(btn){btn.disabled=true;btn.textContent='Ava is reading your image...';}
+  var brand=document.getElementById('cpBrand').value||'a luxury brand';
+  var narrative=document.getElementById('cpNarrative').value||'';
+  callClaude([{role:'user',content:[
+    {type:'image',source:{type:'base64',media_type:'image/jpeg',data:src.split(',')[1]}},
+    {type:'text',text:'You are Ava\'vaci, a luxury Instagram campaign AI.\n\nLook at this image and give a SHORT scene suggestion (2-3 sentences) for how it fits into a luxury brand deal campaign with '+brand+'.\n\nContext: '+narrative+'\n\nDescribe: the mood, how Amara should relate to this image, and what campaign moment it represents. Evocative, editorial, luxury-focused. Think Vogue meets Instagram.'}
+  ]}],function(text){
+    images[i].suggestion=text; saveMeta();
+    if(btn){btn.disabled=false;btn.innerHTML='<svg viewBox="0 0 24 24" style="width:11px;height:11px;fill:var(--gold)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Regenerate Suggestion';}
+    var box=document.getElementById('sugBox');
+    if(box){box.querySelector('.sug-txt').textContent=text;box.classList.add('show');}
   });
 }
 
-// ── COPY / EXPORT ──
-function copyScenePrompt(idx){
-  var campaign = getActiveCampaign();
-  if(!campaign) return;
-  navigator.clipboard.writeText(campaign.scenes[idx].prompt || '');
-  alert('Prompt copied!');
-}
-
-function copyCaptions(){
-  var campaign = getActiveCampaign();
-  if(!campaign) return;
-  var text = campaign.caption + '\n\n' + (campaign.hashtags||[]).join(' ');
-  navigator.clipboard.writeText(text);
-  alert('Captions and hashtags copied!');
-}
-
-function exportCampaignBrief(){
-  var campaign = getActiveCampaign();
-  if(!campaign){ alert('Please select a campaign first.'); return; }
-  var text = 'GLAMPAIGN CAMPAIGN BRIEF\nby Velocity Agentic\n';
-  text += '═'.repeat(50)+'\n\n';
-  text += 'CAMPAIGN: '+campaign.name+'\n';
-  text += 'GOAL: '+campaign.goal.replace(/_/g,' ').toUpperCase()+'\n';
-  text += 'INDUSTRY: '+campaign.industry+'\n';
-  text += 'TOTAL SCENES: '+campaign.scenes.length+'\n';
-  text += 'CREATED: '+campaign.created+'\n\n';
-  text += '═'.repeat(50)+'\n\n';
-  campaign.scenes.forEach(function(s,i){
-    text += 'SCENE '+(i+1)+': '+s.title.toUpperCase()+'\n';
-    text += 'Type: '+s.type+' · Duration: '+s.duration+'s\n';
-    if(s.brief) text += 'Brief: '+s.brief+'\n';
-    text += '\nDIRECTOR\'S PROMPT:\n'+s.prompt+'\n';
-    text += '\n'+'-'.repeat(40)+'\n\n';
+function genCaption(i){
+  var img=images[i]; var brand=document.getElementById('cpBrand').value||'luxury brand';
+  var prompt=img.prompt||img.suggestion||img.label;
+  callClaude([{role:'user',content:'Write a luxury Instagram caption for this scene in a brand partnership campaign with '+brand+'.\n\nScene: '+prompt+'\n\nCaption: aspirational, 2-3 sentences, confident and effortless luxury voice. Include 1 elegant CTA. No hashtags.'}],
+  function(text){
+    images[i].caption=text; images[i].done=true; saveMeta();
+    var box=document.getElementById('capBox'); if(box){box.textContent=text;box.classList.add('show');}
+    renderBoard(); renderEditor();
   });
-  if(campaign.caption){
-    text += '═'.repeat(50)+'\n\nCAMPAIGN CAPTION:\n'+campaign.caption+'\n\n';
-    text += 'HASHTAGS:\n'+(campaign.hashtags||[]).join(' ')+'\n';
-  }
-  downloadText(text, campaign.name.replace(/\s+/g,'-')+'-glampaign-brief.txt');
-  closeModal('exportModal');
 }
 
-function exportCaptions(){
-  var campaign = getActiveCampaign();
-  if(!campaign){ alert('Please select a campaign first.'); return; }
-  var text = 'GLAMPAIGN CAPTIONS\n'+campaign.name+'\n\n';
-  text += 'CAMPAIGN CAPTION:\n'+campaign.caption+'\n\n';
-  text += 'HASHTAGS:\n'+(campaign.hashtags||[]).join(' ')+'\n\n';
-  text += 'SCENE CAPTIONS:\n';
-  campaign.scenes.forEach(function(s,i){
-    text += '\nScene '+(i+1)+' — '+s.title+':\n'+(s.caption || '[Not yet generated]')+'\n';
+function generateAllSuggestions(){ images.forEach(function(_,i){ setTimeout(function(){genSuggestion(i);},i*1300); }); }
+
+function callClaude(messages,cb){
+  fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:messages})})
+  .then(function(r){return r.json();})
+  .then(function(d){cb((d.content||[]).map(function(c){return c.text||'';}).join(''));})
+  .catch(function(){cb('Unable to generate. Please try again.');});
+}
+
+function buildPitchDeck(){
+  if(!images.length){alert('Add at least one image to build your pitch deck.');return;}
+  var title=document.getElementById('cpTitle').value||'Campaign';
+  var brand=document.getElementById('cpBrand').value||'Brand Partner';
+  var creator=document.getElementById('cpCreator').value||'Amara by Velocity Agentic';
+  var narrative=document.getElementById('cpNarrative').value||'A luxury campaign that bridges artistry and aspiration.';
+  var contact=document.getElementById('cpContact').value||'';
+  var goal=document.getElementById('cpGoal').value.replace(/_/g,' ');
+
+  document.getElementById('loadOv').classList.add('show');
+  var msgs=['Styling the moodboard...','Writing scene copy...','Crafting brand alignment...','Polishing deliverables...','Almost ready...'];
+  var mi=0; var mInt=setInterval(function(){document.getElementById('loadSub').textContent=msgs[mi%msgs.length];mi++;},1100);
+
+  callClaude([{role:'user',content:'You are Glampaign, a luxury brand deal campaign AI.\n\nGenerate brand alignment content:\n\nCampaign: '+title+'\nCreator: '+creator+'\nBrand: '+brand+'\nGoal: '+goal+'\nNarrative: '+narrative+'\n\nRespond ONLY in JSON (no markdown):\n{"whyCreator":"2-3 sentences","whyBrand":"2-3 sentences","deliverables":[{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."},{"title":"...","desc":"..."}],"tagline":"One elegant campaign tagline"}'}],
+  function(text){
+    clearInterval(mInt); document.getElementById('loadOv').classList.remove('show');
+    var al={};
+    try{al=JSON.parse(text.replace(/```json|```/g,'').trim());}catch(e){
+      al={whyCreator:creator+' represents the intersection of digital authority and aspirational luxury — exactly the audience '+brand+' is reaching.',
+        whyBrand:brand+' stands for uncompromising quality and effortless confidence — values at the core of everything '+creator+' creates.',
+        deliverables:[{title:'Hero Campaign Reel',desc:'One premium short-form video (30-60s) featuring the full narrative'},
+          {title:'Moodboard Content Series',desc:'5-7 static posts from the campaign storyboard over 2 weeks'},
+          {title:'Instagram Stories',desc:'Behind-the-scenes story sequence driving to the hero reel'},
+          {title:'Caption & Hashtag Rights',desc:'All captions crafted to maintain brand voice consistency'}],
+        tagline:title+' — Where Luxury Meets Legacy'};}
+    renderDeck(title,brand,creator,narrative,contact,al);
   });
-  downloadText(text, campaign.name.replace(/\s+/g,'-')+'-captions.txt');
-  closeModal('exportModal');
 }
 
-function exportPrompts(){
-  var campaign = getActiveCampaign();
-  if(!campaign){ alert('Please select a campaign first.'); return; }
-  var text = 'GLAMPAIGN — AMARA AVATAR PROMPTS\n'+campaign.name+'\n\n';
-  campaign.scenes.forEach(function(s,i){
-    text += 'SCENE '+(i+1)+': '+s.title+'\n';
-    text += s.prompt || '[Not yet generated]';
-    text += '\n\n'+'─'.repeat(40)+'\n\n';
+function renderDeck(title,brand,creator,narrative,contact,al){
+  document.getElementById('deckTitle').textContent=title;
+  var s=document.getElementById('deckSlides'); s.innerHTML='';
+
+  // Cover
+  var c=document.createElement('div'); c.className='ds';
+  c.innerHTML='<div class="s-cover"><div class="cover-ey">Brand Partnership Proposal</div>'+
+    '<h1 class="cover-h1">'+title+'</h1><p class="cover-sub">'+narrative+'</p>'+
+    '<div class="cover-line">'+creator+' · '+brand+' · '+new Date().getFullYear()+'</div>'+
+    (al.tagline?'<div style="margin-top:20px;font-family:\'Cormorant Garamond\',serif;font-size:.95rem;color:var(--muted);letter-spacing:.08em;font-style:italic">\''+al.tagline+'\'</div>':'')+
+    '</div>'; s.appendChild(c);
+
+  // Moodboard
+  var mb=document.createElement('div'); mb.className='ds';
+  var gi=images.map(function(img){var src=store[img.id]||'';return src?'<img src="'+src+'" alt=""/>':'';}).join('');
+  mb.innerHTML='<div class="s-mood"><div class="s-label">Visual Direction</div><h2 class="s-h2">The <em>Moodboard</em></h2><div class="deck-grid">'+gi+'</div></div>';
+  s.appendChild(mb);
+
+  // Scenes
+  images.forEach(function(img,i){
+    var src=store[img.id]||''; if(!src) return;
+    var sl=document.createElement('div'); sl.className='ds';
+    sl.innerHTML='<div class="s-scene"><div class="ss-img"><img src="'+src+'" alt=""/></div>'+
+      '<div class="ss-con"><div class="ss-num">Scene '+(i+1)+' of '+images.length+'</div>'+
+      '<div class="ss-title">'+img.label+'</div>'+
+      '<div class="ss-dir">'+(img.suggestion||img.prompt||'Scene direction to be defined.')+'</div>'+
+      (img.caption?'<div class="ss-cap">'+img.caption+'</div>':'')+
+      '</div></div>'; s.appendChild(sl);
   });
-  downloadText(text, campaign.name.replace(/\s+/g,'-')+'-prompts.txt');
-  closeModal('exportModal');
+
+  // Alignment
+  var al2=document.createElement('div'); al2.className='ds';
+  al2.innerHTML='<div class="s-align"><div class="s-label">Why This Partnership</div><h2 class="s-h2">Brand <em>Alignment</em></h2>'+
+    '<div class="align-grid"><div class="abox"><div class="abox-lbl">'+creator+'</div><div class="abox-txt">'+al.whyCreator+'</div></div>'+
+    '<div class="abox"><div class="abox-lbl">'+brand+'</div><div class="abox-txt">'+al.whyBrand+'</div></div></div></div>';
+  s.appendChild(al2);
+
+  // Deliverables
+  var dl=document.createElement('div'); dl.className='ds';
+  var dh='<div class="s-del"><div class="s-label">What\'s Included</div><h2 class="s-h2">Campaign <em>Deliverables</em></h2><div class="del-list">';
+  (al.deliverables||[]).forEach(function(d,i){dh+='<div class="del-item"><div class="del-n">0'+(i+1)+'.</div><div class="del-i"><h4>'+d.title+'</h4><p>'+d.desc+'</p></div></div>';});
+  dh+='</div></div>'; dl.innerHTML=dh; s.appendChild(dl);
+
+  // Contact
+  var co=document.createElement('div'); co.className='ds';
+  co.innerHTML='<div class="s-contact"><div class="c-gem"></div><div class="c-name">'+creator+'</div>'+
+    '<div class="c-title">Luxury Brand Strategist · Content Creator · AI Avatar Architect</div>'+
+    (contact?'<div class="c-email">'+contact+'</div>':'')+
+    '<div style="margin-top:20px;font-size:.56rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);position:relative;z-index:1">Built with Glampaign by Velocity Agentic</div></div>';
+  s.appendChild(co);
+
+  document.getElementById('deckOv').classList.add('open');
 }
 
-function downloadText(text, filename){
-  var blob = new Blob([text], {type:'text/plain'});
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  a.href = url; a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
+function exportDeck(){
+  var title=document.getElementById('cpTitle').value||'Campaign';
+  var brand=document.getElementById('cpBrand').value||'Brand';
+  var creator=document.getElementById('cpCreator').value||'Amara';
+  var narrative=document.getElementById('cpNarrative').value||'';
+  var contact=document.getElementById('cpContact').value||'';
+  var t='GLAMPAIGN PITCH DECK — by Velocity Agentic\n'+'═'.repeat(50)+'\n\n';
+  t+='CAMPAIGN: '+title+'\nBRAND PARTNER: '+brand+'\nCREATOR: '+creator+'\nDATE: '+new Date().toLocaleDateString()+'\n\n';
+  t+='NARRATIVE:\n'+narrative+'\n\n'+'─'.repeat(40)+'\n\nSCENES\n\n';
+  images.forEach(function(img,i){
+    t+='SCENE '+(i+1)+': '+img.label.toUpperCase()+'\n';
+    if(img.suggestion) t+='Scene Direction: '+img.suggestion+'\n';
+    if(img.prompt) t+='Avatar Prompt: '+img.prompt+'\n';
+    if(img.caption) t+='Caption: '+img.caption+'\n';
+    t+='\n';
+  });
+  t+='─'.repeat(40)+'\nCONTACT: '+contact+'\n\nBuilt with Glampaign · tweites-beep.github.io/glampaign\n';
+  var blob=new Blob([t],{type:'text/plain'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download=title.replace(/\s+/g,'-')+'-glampaign.txt';
+  a.click();URL.revokeObjectURL(url);
 }
 
-// ── MODALS ──
-function openModal(id){ document.getElementById(id).classList.add('open'); }
-function closeModal(id){ document.getElementById(id).classList.remove('open'); }
-function openNewCampaignModal(){
-  document.getElementById('newCampaignName').value = '';
-  document.getElementById('newCampaignIndustry').value = '';
-  openModal('newCampaignModal');
+function clearAll(){
+  if(images.length&&!confirm('Start fresh? Current images will be cleared.'))return;
+  images=[];store={};selIdx=null;saveMeta();renderBoard();renderEditor();
+  ['cpTitle','cpBrand','cpCreator','cpNarrative','cpContact'].forEach(function(id){document.getElementById(id).value='';});
+  document.querySelectorAll('.btag').forEach(function(t){t.classList.remove('on');});
+  document.getElementById('uz').style.display='';
 }
-function openExportModal(){ openModal('exportModal'); }
 
-// ── INIT ──
-renderCampaignList();
-renderCanvas();
-renderRightPanel();
+// Drag drop
+var board=document.getElementById('moodboard');
+board.addEventListener('dragover',function(e){e.preventDefault();document.getElementById('uz').classList.add('drag');});
+board.addEventListener('dragleave',function(){document.getElementById('uz').classList.remove('drag');});
+board.addEventListener('drop',function(e){
+  e.preventDefault();document.getElementById('uz').classList.remove('drag');
+  if(e.dataTransfer.files.length) handleUpload({files:e.dataTransfer.files,value:''});
+});
+
+buildBrandTags(); renderBoard();
 </script>
 </body>
 </html>
